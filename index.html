@@ -285,9 +285,12 @@
       max-height: 0;
       transition: max-height 0.2s ease-out, background-color 0.2s ease;
     }
-    .settings-panel.is-open { max-height: 260px; }
+    .settings-panel.is-open { max-height: 340px; }
     @media (min-width: 880px) {
-      .settings-panel.is-open { max-height: 70px; }
+      .settings-panel.is-open { max-height: 140px; }
+    }
+    @media (min-width: 1180px) {
+      .settings-panel.is-open { max-height: 80px; }
     }
 
     .settings-panel__inner {
@@ -744,7 +747,91 @@
 
       a { color: #000 !important; text-decoration: underline; }
       .reading-row { break-inside: avoid; }
+
+      /* --------------------------------------------------------------
+         WORKSHEET MODE (body.worksheet-mode, set by "Print blank copy").
+         A clean copy for students to annotate before the reveal: text
+         and headings only, double-spaced, with a wide blank right margin
+         for marginalia and a name/date block at the top. Overrides the
+         reveal-print rules above. Triggered only via the button, so a
+         plain Ctrl+P still prints the annotated reveal version.
+         -------------------------------------------------------------- */
+      body.worksheet-mode .ann-col { display: none !important; }
+      body.worksheet-mode .ann-legend { display: none !important; }
+      body.worksheet-mode .divider-asset { display: none !important; }
+      body.worksheet-mode .divider { padding: 1.2rem 0 !important; }
+
+      /* Strip every mark so students start from a blank text */
+      body.worksheet-mode .mark-yellow,
+      body.worksheet-mode .mark-blue,
+      body.worksheet-mode .mark-red,
+      body.worksheet-mode .ann-mark--highlight,
+      body.worksheet-mode .ann-mark--underline,
+      body.worksheet-mode .ann-mark--box,
+      body.worksheet-mode .ann-mark--circle {
+        background: none !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+      }
+      body.worksheet-mode .ann-bracket-para {
+        border-left: none !important;
+        padding-left: 0 !important;
+      }
+
+      /* Wide blank right margin + roughly double spacing for annotation */
+      body.worksheet-mode .text-col { max-width: 62% !important; }
+      body.worksheet-mode .text-col p {
+        line-height: 2.1 !important;
+        margin-bottom: 1.5rem !important;
+      }
+      body.worksheet-mode .lede { font-size: 13pt !important; }
+
+      /* Name / Date / Class block, shown only when printing a worksheet */
+      body.worksheet-mode .worksheet-header { display: flex !important; }
     }
+
+    /* The worksheet header is hidden everywhere except worksheet-mode print */
+    .worksheet-header { display: none; }
+    .worksheet-header {
+      justify-content: space-between;
+      gap: 2rem;
+      font-family: var(--font-display);
+      font-size: 11pt;
+      color: #000;
+      border-bottom: 1.5pt solid #000;
+      padding-bottom: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .worksheet-header span { white-space: nowrap; }
+
+    /* "Print blank copy" action in the settings panel */
+    .settings-action {
+      background: transparent;
+      border: 1px solid rgba(253,253,251,0.35);
+      color: rgba(253,253,251,0.8);
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+    }
+    .settings-action:hover,
+    .settings-action:focus-visible {
+      border-color: #FDFDFB;
+      color: #FDFDFB;
+      background-color: rgba(253,253,251,0.1);
+      outline: none;
+    }
+    .settings-action svg { width: 13px; height: 13px; display: block; }
 
   </style>
 </head>
@@ -814,10 +901,24 @@
       <button class="ctrl-btn" data-theme="contrast" aria-pressed="false" aria-label="High contrast theme">Contrast</button>
     </div>
 
+    <div class="ctrl-cluster" role="group" aria-label="Worksheet">
+      <span class="ctrl-label" aria-hidden="true">Worksheet</span>
+      <button class="settings-action" id="print-blank" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print blank copy
+      </button>
+    </div>
+
   </div>
 </div>
 
 <main id="main">
+
+  <div class="worksheet-header" aria-hidden="true">
+    <span>Name: _______________________</span>
+    <span>Date: ______________</span>
+    <span>Class: ______________</span>
+  </div>
 
   <header class="page-header">
     <h1 class="page-title">On Annotation</h1>
@@ -849,7 +950,7 @@
       <div class="ann-col">
         <aside class="annotation annotation--question" aria-hidden="true">
           <span class="ann-symbol">?</span>
-          <p class="ann-text">Four out of five! This is why I try to emphasize skills over specific content. But where's the citation? Unsourced claim.</p>
+          <p class="ann-text">Four out of five! But where's the citation? Unsourced claim. This is why I try to emphasize skills over specific content.</p>
         </aside>
       </div>
     </div>
@@ -1657,6 +1758,31 @@
         toggleSettingsPanel(false);
       }
     });
+
+    /* ------------------------------------------------------------------
+       Worksheet (blank copy) print
+       Adds body.worksheet-mode, prints, then removes it on afterprint so
+       the screen and a normal Ctrl+P (the annotated reveal) are unchanged.
+    ------------------------------------------------------------------ */
+    var printBlankBtn = document.getElementById('print-blank');
+    function printWorksheet() {
+      body.classList.add('worksheet-mode');
+      window.print();
+    }
+    if (printBlankBtn) {
+      printBlankBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        printWorksheet();
+      });
+    }
+    window.addEventListener('afterprint', function () {
+      body.classList.remove('worksheet-mode');
+    });
+    /* ?blank in the URL arms the worksheet copy directly (e.g. a bookmarked
+       handout link). Harmless on screen, since worksheet rules are print-only. */
+    if (window.location.search.indexOf('blank') !== -1) {
+      window.addEventListener('load', printWorksheet);
+    }
 
     /* ------------------------------------------------------------------
        Annotation Toggle
