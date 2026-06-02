@@ -584,11 +584,11 @@
     .ann-doodle            { display: block; height: auto; margin-bottom: 0.75rem; }
     .ann-doodle--sloth     { width: 112px; }
     .ann-doodle--scale     { width: 92px; }
-    .ann-doodle--pointer   { width: 84px; }
+    .ann-doodle--pointer   { width: 84px; transform: scaleX(-1); }
     .ann-doodle--sloth-end { width: 140px; margin-top: 1rem; }
 
     .margin-ornament { display: block; }
-    .ornament-asset  { display: block; width: 100px; height: auto; }
+    .ornament-asset  { display: block; width: 100px; height: auto; transform: scaleX(-1); }
 
     /* ==========================================================================
        10. INLINE MARKUP TOKENS (conditional on annotations-visible)
@@ -1094,6 +1094,36 @@
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
+          <svg class="ann-doodle ann-doodle--cat" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 80">
+  <path d="M28 68 C20 68 16 62 16 54 C16 42 20 34 30 30 C30 24 28 18 24 14 C32 16 36 20 38 26 C42 24 48 24 52 26 C54 20 58 16 66 14 C62 18 60 24 60 30 C70 34 74 42 74 54 C74 62 70 68 62 68 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M30 30 C28 22 24 14 24 14 C32 16 36 20 38 26 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M60 30 C62 22 66 14 66 14 C58 16 54 20 52 26 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M31 27 C30 22 27 17 26 15 C31 17 34 21 35 25 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <path d="M59 27 C60 22 63 17 64 15 C59 17 56 21 55 25 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <ellipse cx="38" cy="44" rx="4" ry="5.5" fill="var(--ornament-ink)" opacity="0.85"/>
+  <ellipse cx="52" cy="44" rx="4" ry="5.5" fill="var(--ornament-ink)" opacity="0.85"/>
+  <ellipse cx="38" cy="44" rx="1.5" ry="4" fill="var(--ornament-fill)" opacity="0.7"/>
+  <ellipse cx="52" cy="44" rx="1.5" ry="4" fill="var(--ornament-fill)" opacity="0.7"/>
+  <path d="M43 51 L45 49 L47 51 L45 53 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="0.7"/>
+  <path d="M45 53 C43 56 40 56 39 55" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M45 53 C47 56 50 56 51 55" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M43 51 C38 50 32 51 28 50" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <path d="M43 52 C38 53 32 54 28 55" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <path d="M47 51 C52 50 58 51 62 50" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <path d="M47 52 C52 53 58 54 62 55" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <path d="M24 68 C20 68 18 72 22 74 C26 76 32 75 34 72 C34 69 30 68 24 68 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M66 68 C70 68 72 72 68 74 C64 76 58 75 56 72 C56 69 60 68 66 68 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M24 70 C24 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M28 70 C28 75" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M32 70 C32 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M58 70 C58 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M62 70 C62 75" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M66 70 C66 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M24 66 C12 60 8 48 14 38 C18 30 26 28 30 32" stroke="var(--ornament-ink)" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M24 66 C12 60 8 48 14 38 C18 30 26 28 30 32" stroke="var(--ornament-fill)" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+  <path d="M40 62 C43 60 46 60 50 62" stroke="var(--ornament-ink)" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3"/>
+  <path d="M38 65 C43 63 47 63 52 65" stroke="var(--ornament-ink)" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.25"/>
+</svg>
           <span class="ann-symbol">$</span>
           <p class="ann-text">Compound interest: key to accruing both wealth and knowledge.</p>
         </aside>
@@ -1183,6 +1213,32 @@
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
+          <svg class="ann-doodle ann-doodle--owl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 88">
+  <path d="M8 82 C30 78 64 78 92 82" stroke="var(--ornament-ink)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+  <path d="M34 80 C31 76 28 74 26 76" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M34 80 C34 74 33 71 31 71" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M34 80 C37 74 39 72 41 74" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M60 80 C57 76 54 74 52 76" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M60 80 C60 74 59 71 57 71" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M60 80 C63 74 65 72 67 74" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M20 78 C16 66 16 50 20 38 C24 28 32 22 47 22 C62 22 70 28 74 38 C78 50 78 66 74 78 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 64 C22 58 24 52 24 46" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.25"/>
+  <path d="M22 72 C24 66 26 60 26 54" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.2"/>
+  <path d="M74 64 C72 58 70 52 70 46" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.25"/>
+  <path d="M72 72 C70 66 68 60 68 54" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.2"/>
+  <path d="M34 24 C30 18 28 13 32 10 C35 14 36 20 36 24 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M60 24 C64 18 66 13 62 10 C59 14 58 20 58 24 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="47" cy="40" rx="16" ry="15" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="1.8"/>
+  <circle cx="40" cy="40" r="6" fill="var(--ornament-ink)"/>
+  <circle cx="54" cy="40" r="6" fill="var(--ornament-ink)"/>
+  <circle cx="40" cy="40" r="2.5" fill="var(--ornament-fill)" opacity="0.65"/>
+  <circle cx="54" cy="40" r="2.5" fill="var(--ornament-fill)" opacity="0.65"/>
+  <circle cx="41" cy="38.5" r="1" fill="white" opacity="0.8"/>
+  <circle cx="55" cy="38.5" r="1" fill="white" opacity="0.8"/>
+  <path d="M44 47 L47 51 L50 47 C48 45 46 45 44 47 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M37 78 C39 70 41 60 41 50" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.22"/>
+  <path d="M57 78 C55 70 53 60 53 50" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.22"/>
+</svg>
           <span class="ann-symbol">!</span>
           <p class="ann-text">This habit alone separates scholars from students. It also claws back hours of time and answers the eternal question ("Why are we doing this?").</p>
         </aside>
@@ -1343,6 +1399,19 @@
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
+          <svg class="ann-doodle ann-doodle--candle" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 66 88">
+  <path d="M16 78 C14 78 12 76 12 74 L14 70 L52 70 L54 74 C54 76 52 78 50 78 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14 74 L52 74" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>
+  <path d="M20 70 C18 64 18 62 20 62 L44 62 C46 62 46 64 44 70 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path d="M20 28 C19 38 18 52 18 62 L46 62 C46 52 45 38 44 28 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 30 C35 40 35 52 36 60" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.18"/>
+  <path d="M22 34 C20 40 19 50 20 56 C20 60 21 62 20 62" stroke="var(--ornament-ink)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.45"/>
+  <path d="M40 32 C42 38 43 48 42 56 C42 60 42 62 44 62" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round" opacity="0.35"/>
+  <path d="M20 28 C26 25 38 25 44 28" stroke="var(--ornament-ink)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.55"/>
+  <path d="M32 28 C31 23 31 18 32 14" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M32 14 C26 8 24 2 28 -2 C30 -6 36 -6 38 -2 C42 2 40 8 32 14 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 12 C28 8 28 2 30 -1 C32 -4 34 -4 35 -1 C37 2 36 8 32 12 Z" fill="var(--ornament-fill)" stroke="none" opacity="0.65"/>
+</svg>
           <span class="ann-symbol">!</span>
           <p class="ann-text">Mark to notice; write a note to understand why it's worth noticing.</p>
         </aside>
