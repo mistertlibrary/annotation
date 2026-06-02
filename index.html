@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>On Annotation: A Handbook for Active Readers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-opendyslexic@1.1.1/pack/font-opendyslexic.css" />
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS
+       ========================================================================== */
+    :root {
+      --color-bg:             #FDFDFB;
+      --color-ink:            #2A1A0E;
+      --color-ink-mid:        rgba(42, 26, 14, 0.65);
+      --color-ink-faint:      #EAE6DC;
+      --color-sidebar-bg:     #F4F1EA;
+      --color-sidebar-border: #E6E1D3;
+      --color-rust:           #A9442A;
+      --color-slate:          #1A365D;
+      --color-advice:         #5A4632;
+      --mark-yellow-bg:       #F5DEB3;
+      --mark-blue-bg:         #C5DCE4;
+      --mark-red-bg:          #F0C9C0;
+      --font-display:         'Inter', system-ui, sans-serif;
+      --font-body:            'Lora', Georgia, serif;
+      --font-editorial:       'IM Fell English', serif;
+      --font-mono:            'JetBrains Mono', monospace;
+      --measure:              640px;
+      --sidebar-width:        290px;
+
+      /* Chrome tokens — header bar and floating pill. Kept distinct from
+         page ink/bg so they behave sensibly when those invert in dark mode. */
+      --chrome-bg:            #1A1008;
+      --chrome-fg:            #FDFDFB;
+      --pill-bg:              #2A1A0E;
+      --pill-fg:              #FDFDFB;
+      --pill-bg-active:       var(--color-rust);
+      --pill-fg-active:       #FDFDFB;
+
+      /* Ornament line art references these so it re-inks per theme. */
+      --ornament-ink:         #3a2510;
+      --ornament-fill:        #e8d9b8;
+      --ornament-accent:      #7a5230;
+    }
+
+    /* ==========================================================================
+       2. THEMES (light is default; dark and contrast are class overrides)
+       ========================================================================== */
+    body.theme-dark {
+      --color-bg:             #121212;
+      --color-ink:            #F0F0F0;
+      --color-ink-mid:        #A5A5A5;
+      --color-ink-faint:      #2F2F2F;
+      --color-sidebar-bg:     #1A1A1A;
+      --color-sidebar-border: #2D2D2D;
+      --color-rust:           #E57C63;
+      --color-slate:          #9EC3E6;
+      --color-advice:         #C9B89A;
+      --mark-yellow-bg:       #40331A;
+      --mark-blue-bg:         #1A2D40;
+      --mark-red-bg:          #401F1A;
+
+      --chrome-bg:            #0C0C0C;
+      --chrome-fg:            #F0F0F0;
+      --pill-bg:              #F0F0F0;
+      --pill-fg:              #121212;
+      --pill-bg-active:       var(--color-rust);
+      --pill-fg-active:       #121212;
+
+      /* Re-ink ornaments for dark ground: warm parchment line, no heavy fill */
+      --ornament-ink:         #D9C9A8;
+      --ornament-fill:        rgba(217,201,168,0.10);
+      --ornament-accent:      #8A6A48;
+    }
+    body.theme-contrast {
+      --color-bg:             #FFFFFF;
+      --color-ink:            #000000;
+      --color-ink-mid:        #000000;
+      --color-ink-faint:      #DDDDDD;
+      --color-sidebar-bg:     #F0F0F0;
+      --color-sidebar-border: #000000;
+      --color-rust:           #BF0000;
+      --color-slate:          #00008B;
+      --color-advice:         #000000;
+      --mark-yellow-bg:       #FFE680;
+      --mark-blue-bg:         #A8D5E2;
+      --mark-red-bg:          #FFB3A8;
+
+      --chrome-bg:            #000000;
+      --chrome-fg:            #FFFFFF;
+      --pill-bg:              #000000;
+      --pill-fg:              #FFFFFF;
+      --pill-bg-active:       #BF0000;
+      --pill-fg-active:       #FFFFFF;
+
+      /* Contrast: pure black line art, no fill */
+      --ornament-ink:         #000000;
+      --ornament-fill:        none;
+      --ornament-accent:      #000000;
+    }
+
+    /* ==========================================================================
+       3. RESET & BASE
+       ========================================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* Root drives the entire type scale. Bumping the size control scales
+       every rem-based element together: prose, headings, annotations, legend. */
+    html { font-size: 100%; }
+    html.text-size-2 { font-size: 113%; }
+    html.text-size-3 { font-size: 126%; }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: 1.15rem;
+      line-height: 1.75;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    body.font-sans    { font-family: var(--font-display) !important; }
+    body.font-dyslexia { font-family: 'OpenDyslexic', sans-serif !important; }
+    body.font-dyslexia .annotation { font-family: 'OpenDyslexic', sans-serif !important; }
+
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 1rem;
+      background: var(--color-rust);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      z-index: 1000;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* ==========================================================================
+       4. SITE HEADER & NAVIGATION
+       ========================================================================== */
+
+    /* Header is always dark — does not invert with page theme */
+    .site-header {
+      position: sticky;
+      top: 0;
+      background-color: var(--chrome-bg);
+      z-index: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .site-header__bar {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.85rem 2rem;
+    }
+
+    .site-header__nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.25rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .site-header__nav a {
+      color: rgba(253, 253, 251, 0.5);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: color 0.15s;
+      padding-bottom: 2px;
+    }
+    .site-header__nav a:hover,
+    .site-header__nav a:focus,
+    .site-header__nav a.is-active {
+      color: #FDFDFB;
+      box-shadow: 0 1px 0 0 rgba(253, 253, 251, 0.45);
+      outline: none;
+    }
+
+    /* Gear floats right within the bar without pushing the centered nav */
+    .site-header__actions {
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .settings-btn {
+      background: transparent;
+      border: none;
+      color: rgba(253, 253, 251, 0.45);
+      padding: 0.4rem 0.45rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+      transition: color 0.15s, background-color 0.15s;
+    }
+    .settings-btn:hover,
+    .settings-btn:focus-visible {
+      color: #FDFDFB;
+      background-color: rgba(253, 253, 251, 0.1);
+      outline: none;
+    }
+    .settings-btn svg {
+      display: block;
+      width: 17px;
+      height: 17px;
+    }
+
+    /* Floating annotation toggle pill */
+    .annotation-float {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.6rem 1.25rem 0.6rem 1rem;
+      background-color: var(--pill-bg);
+      color: var(--pill-fg);
+      border: none;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+      transition: background-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.1s;
+    }
+    .annotation-float:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24);
+      transform: translateY(-1px);
+    }
+    .annotation-float:focus-visible {
+      outline: 2px solid var(--color-rust);
+      outline-offset: 3px;
+    }
+    body.annotations-visible .annotation-float {
+      background-color: var(--pill-bg-active);
+      color: var(--pill-fg-active);
+    }
+    /* 28x35 native viewBox — let height follow width to keep the quill's proportions */
+    .annotation-float__icon {
+      width: 15px;
+      height: auto;
+      display: block;
+    }
+
+    /* ==========================================================================
+       5. SETTINGS PANEL
+       ========================================================================== */
+    .settings-panel {
+      background: var(--chrome-bg);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.2s ease-out, background-color 0.2s ease;
+    }
+    .settings-panel.is-open { max-height: 260px; }
+    @media (min-width: 880px) {
+      .settings-panel.is-open { max-height: 70px; }
+    }
+
+    .settings-panel__inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0.85rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+    }
+
+    .ctrl-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ctrl-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(253,253,251,0.5);
+      margin-right: 0.5rem;
+      font-weight: 600;
+    }
+
+    .ctrl-btn {
+      background: transparent;
+      border: 1px solid rgba(253,253,251,0.25);
+      color: rgba(253,253,251,0.7);
+      padding: 0.2rem 0.85rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+    }
+    .ctrl-btn[aria-pressed="true"] {
+      border-color: rgba(253,253,251,0.9);
+      background-color: rgba(253,253,251,0.15);
+      color: #FDFDFB;
+      font-weight: 600;
+    }
+    .ctrl-btn:hover:not([aria-pressed="true"]) {
+      border-color: rgba(253,253,251,0.5);
+      background-color: rgba(253,253,251,0.08);
+      color: rgba(253,253,251,0.9);
+    }
+
+    /* ==========================================================================
+       6. PAGE STRUCTURE
+       ========================================================================== */
+    main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 5rem 2rem 6rem;
+    }
+    /* Annotations off: tighten the frame so the reading measure centers.
+       The text column's own max-width is unchanged, so line breaks are stable
+       across the toggle; only the outer frame narrows. Applies at desktop only,
+       where the empty sidebar would otherwise pull the composition left. */
+    @media (min-width: 1040px) {
+      main { max-width: 760px; transition: max-width 0.25s ease; }
+      body.annotations-visible main { max-width: 1300px; }
+    }
+
+    .page-title {
+      font-family: var(--font-editorial);
+      font-size: 3.5rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin: 0 0 0.25rem;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .page-subtitle {
+      font-style: italic;
+      font-size: 1.35rem;
+      color: var(--color-ink-mid);
+      margin: 0 0 3rem;
+      text-align: center;
+    }
+
+    .ann-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--color-ink-faint);
+      justify-content: center;
+      max-height: 0;
+      overflow: hidden;
+      margin-bottom: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: max-height 0.3s ease, opacity 0.25s ease, margin-bottom 0.3s ease;
+    }
+    body.annotations-visible .ann-legend {
+      max-height: 80px;
+      opacity: 1;
+      margin-bottom: 4rem;
+      pointer-events: auto;
+    }
+
+    .ann-legend__label { color: var(--color-ink-mid); font-weight: 700; }
+    .ann-legend__item  { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; }
+    .ann-legend__dot   { width: 8px; height: 8px; }
+
+    .ann-legend__item--note     .ann-legend__dot { background-color: var(--color-slate); }
+    .ann-legend__item--question .ann-legend__dot { background-color: var(--color-rust); }
+    .ann-legend__item--advice   .ann-legend__dot { background-color: var(--color-advice); }
+
+    .ann-legend__glyph {
+      font-family: var(--font-display);
+      font-weight: 700;
+      margin-right: 0.05rem;
+    }
+    .ann-legend__item--note     .ann-legend__glyph { color: var(--color-slate); }
+    .ann-legend__item--question .ann-legend__glyph { color: var(--color-rust); }
+    .ann-legend__item--advice   .ann-legend__glyph { color: var(--color-advice); }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 2rem 0 1rem;
+      max-width: var(--measure);
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       7. ASYMMETRIC TWO-COLUMN GRID
+       ========================================================================== */
+    .reading-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 1040px) {
+      .reading-row {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 4rem;
+        margin-bottom: 0;
+      }
+    }
+
+    /* Focus dimming: only rows that actually carry an annotation dim at rest,
+       and only gently. Rows with an empty annotation column never dim, so
+       scrolling past unannotated prose stays full-contrast. No transform, to
+       avoid subpixel blur on the text. */
+    @media (min-width: 1040px) {
+      /* Dim the paragraph text of annotated rows only. The bracket border
+         lives on .text-col (the container), so it stays crisp; the coda is
+         exempt so the send-off never recedes; the sidebar annotation is a
+         separate column and is unaffected. The result: the techniques being
+         demonstrated are never the faintest thing on the page. */
+      body.annotations-visible .reading-row:has(.ann-col:not(:empty)) .text-col:not(.coda) > p {
+        opacity: 0.82;
+        transition: opacity 0.2s ease;
+      }
+      body.annotations-visible .reading-row:has(.ann-col:not(:empty)):hover .text-col > p,
+      body.annotations-visible .reading-row:has(.ann-col:not(:empty)):focus-within .text-col > p {
+        opacity: 1;
+      }
+    }
+
+    .text-col {
+      width: 100%;
+      max-width: var(--measure);
+    }
+    @media (min-width: 1040px) {
+      .text-col { padding: 1.25rem 0; }
+    }
+    .text-col p            { margin: 0 0 1.5rem; }
+    .text-col p:last-child { margin-bottom: 0; }
+
+    .lede { font-size: 1.35rem; line-height: 1.7; }
+    .coda { font-size: 1.25rem; font-style: italic; }
+
+    .divider        { padding: 3rem 0; max-width: var(--measure); }
+    .divider-asset  { display: block; max-width: 100px; margin: 0; height: auto; }
+
+    /* ==========================================================================
+       8. ANNOTATION COLUMN
+          Mobile (<1040px): hidden; when annotations-visible, non-empty columns
+          render as inline left-bordered callout blocks beneath their paragraph.
+          Desktop (≥1040px): sidebar panel, revealed by toggle.
+       ========================================================================== */
+
+    /* --- Mobile default: hidden --- */
+    .ann-col { display: none; }
+
+    /* --- Mobile: inline callout when toggle is on --- */
+    @media (max-width: 1039px) {
+      body.annotations-visible .ann-col:not(:empty) {
+        display: block;
+        margin-top: -0.25rem;
+        margin-bottom: 1.25rem;
+      }
+      body.annotations-visible .ann-col:not(:empty) aside.annotation {
+        display: block;
+        padding: 0.65rem 1rem;
+        background-color: var(--color-sidebar-bg);
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        line-height: 1.6;
+        letter-spacing: 0.01em;
+      }
+      body.annotations-visible .ann-col .annotation--note {
+        border-left: 3px solid var(--color-slate);
+        color: var(--color-slate);
+      }
+      body.annotations-visible .ann-col .annotation--question {
+        border-left: 3px solid var(--color-rust);
+        color: var(--color-rust);
+      }
+      body.annotations-visible .ann-col .annotation--advice {
+        border-left: 3px solid var(--color-advice);
+        color: var(--color-advice);
+      }
+      /* Ornamental SVGs don't translate inline; suppress them on mobile,
+         with one exception: the closing sloth is the send-off and is let
+         through, centered, beneath its annotation. */
+      body.annotations-visible .ann-col .margin-ornament,
+      body.annotations-visible .ann-col .ann-doodle:not(.ann-doodle--sloth-end) {
+        display: none;
+      }
+      body.annotations-visible .ann-col .ann-doodle--sloth-end {
+        display: block;
+        width: 88px;
+        margin: 0.75rem auto 0;
+      }
+    }
+
+    /* --- Desktop: sidebar panel --- */
+    @media (min-width: 1040px) {
+      .ann-col {
+        display: block;
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
+        padding: 1.25rem 1.75rem;
+        border-left: 1px solid transparent;
+        background-color: transparent;
+        opacity: 0;
+        pointer-events: none;
+        transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+      }
+      body.annotations-visible .ann-col {
+        opacity: 1;
+        pointer-events: auto;
+        background-color: var(--color-sidebar-bg);
+        border-left: 1px solid var(--color-sidebar-border);
+      }
+    }
+
+    /* ==========================================================================
+       9. ANNOTATION COMPONENTS
+       ========================================================================== */
+    .annotation {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+    .annotation p { margin: 0; }
+
+    .annotation--note     { color: var(--color-slate); }
+    .annotation--question { color: var(--color-rust); }
+    .annotation--advice   { color: var(--color-advice); }
+
+    .ann-symbol {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .ann-text--thesis { font-weight: 700; }
+
+    .ann-doodle            { display: block; height: auto; margin-bottom: 0.75rem; }
+    .ann-doodle--sloth     { width: 80px; }
+    .ann-doodle--scale     { width: 65px; }
+    .ann-doodle--pointer   { width: 55px; }
+    .ann-doodle--sloth-end { width: 100px; margin-top: 1rem; }
+
+    .margin-ornament { display: block; }
+    .ornament-asset  { display: block; width: 70px; height: auto; }
+
+    /* ==========================================================================
+       10. INLINE MARKUP TOKENS (conditional on annotations-visible)
+       ========================================================================== */
+    body.annotations-visible .mark-yellow { background-color: var(--mark-yellow-bg); color: inherit; }
+    body.annotations-visible .mark-blue   { background-color: var(--mark-blue-bg);   color: inherit; }
+    body.annotations-visible .mark-red    { background-color: var(--mark-red-bg);    color: inherit; }
+
+    body.annotations-visible .ann-mark--highlight {
+      background-color: var(--mark-yellow-bg);
+      padding: 0.05rem 0.15rem;
+    }
+    body.annotations-visible .ann-mark--underline {
+      box-shadow: inset 0 -2px 0 0 var(--color-rust);
+    }
+    body.annotations-visible .ann-bracket-para {
+      border-left: 3px solid var(--color-rust);
+      padding-left: 1.25rem;
+    }
+
+    /* Box mark: fences off a single term, shown as a worked example in
+       the "Toolbox" section. Outline keeps it from nudging the text. */
+    body.annotations-visible .ann-mark--box {
+      outline: 1.5px solid var(--color-slate);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* ==========================================================================
+       11. RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 879px) {
+      .site-header__bar {
+        padding: 0.75rem 3rem; /* right padding keeps gear clear of nav */
+      }
+      .site-header__nav {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 0.2rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .site-header__nav ul { gap: 1.25rem; }
+      .site-header__actions {
+        right: 0.75rem;
+      }
+      main {
+        padding: 3rem 1.5rem 6rem;
+      }
+      .page-title    { font-size: 2.5rem; }
+      .page-subtitle { font-size: 1.15rem; }
+      .annotation-float {
+        bottom: 1.25rem;
+        right: 1.25rem;
+      }
+    }
+
+    /* ==========================================================================
+       12. REDUCED MOTION
+       ========================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      .annotation-float:hover { transform: none; }
+    }
+
+    /* ==========================================================================
+       13. PRINT
+          A handbook about marking up print should print well. Drop the chrome,
+          render annotations inline beneath their paragraph as black line notes,
+          and let the ornaments sit as plain black line art on white.
+       ========================================================================== */
+    @media print {
+      .site-header,
+      .settings-panel,
+      .annotation-float,
+      .skip-link { display: none !important; }
+
+      html, body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 11pt;
+      }
+
+      main { padding: 0; max-width: none; }
+
+      /* Linearize the grid: text then its annotation, stacked */
+      .reading-row { display: block !important; opacity: 1 !important; }
+      .text-col { max-width: none; padding: 0; }
+
+      /* Force annotations visible in print regardless of toggle state */
+      .ann-col:not(:empty) {
+        display: block !important;
+        opacity: 1 !important;
+        background: none !important;
+        border-left: 2pt solid #000 !important;
+        padding: 0.2rem 0 0.2rem 0.6rem !important;
+        margin: 0.3rem 0 0.8rem !important;
+        width: auto !important;
+        min-width: 0 !important;
+      }
+      .annotation { color: #000 !important; font-size: 9pt; }
+      .annotation--note,
+      .annotation--question,
+      .annotation--advice { color: #000 !important; }
+
+      /* Ornaments print as black line art */
+      svg { --ornament-ink: #000 !important; --ornament-fill: #fff !important; --ornament-accent: #000 !important; }
+
+      /* Show inline markup as plain underlines/keylines, no fill colors */
+      .mark-yellow, .mark-blue, .mark-red,
+      .ann-mark--highlight { background: none !important; box-shadow: none !important; }
+      .ann-mark--highlight,
+      .ann-mark--underline { box-shadow: inset 0 -1.5pt 0 0 #000 !important; }
+      .ann-bracket-para { border-left: 2pt solid #000 !important; }
+
+      .ann-legend {
+        max-height: none !important; opacity: 1 !important;
+        margin-bottom: 1rem !important; color: #000 !important;
+      }
+
+      a { color: #000 !important; text-decoration: underline; }
+      .reading-row { break-inside: avoid; }
+    }
+
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+<div aria-live="polite" aria-atomic="true" class="sr-only" id="toggle-announcement"></div>
+
+<header class="site-header" role="banner">
+  <div class="site-header__bar">
+    <nav class="site-header__nav" aria-label="Page sections">
+      <ul>
+        <li><a href="#argument">The Argument</a></li>
+        <li><a href="#why-bother">Why Bother</a></li>
+        <li><a href="#before-you-begin">Before You Begin</a></li>
+        <li><a href="#mark-it-up">Mark It Up</a></li>
+        <li><a href="#write-your-notes">Write Your Notes</a></li>
+        <li><a href="#get-out-there">Get Out There</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <button class="settings-btn" id="settings-btn" aria-expanded="false" aria-controls="settings-panel" aria-label="Display settings">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<button class="annotation-float" id="annotation-toggle" aria-pressed="false" title="Keyboard shortcut: Alt+A">
+  <svg class="annotation-float__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 35" role="img" aria-label="Quill pen">
+  <path d="M22 3 C27 5 27 12 24 17 C20 22 14 27 8 28 C5 29 4 30 4 30 C5 29 7 27 7 25 C3 22 2 16 5 11 C9 5 17 0 22 3 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M21 4 L5 30" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M19 8 C22 10 23 14 21 17" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M15 14 C18 16 18 19 16 22" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M17 9 C13 8 9 9 7 13" stroke="var(--ornament-ink)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M13 15 C9 14 6 15 5 18" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M5 30 L3 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+  <path d="M5 30 L7 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+</svg>
+  <span id="toggle-label">Show Annotations</span>
+</button>
+
+<div class="settings-panel" id="settings-panel" role="region" aria-label="Display settings" aria-hidden="true">
+  <div class="settings-panel__inner">
+
+    <div class="ctrl-cluster" role="group" aria-label="Text size">
+      <span class="ctrl-label" aria-hidden="true">Text size</span>
+      <button class="ctrl-btn" data-size="1" aria-pressed="true"  aria-label="Standard text size">A</button>
+      <button class="ctrl-btn" data-size="2" aria-pressed="false" aria-label="Large text size">A+</button>
+      <button class="ctrl-btn" data-size="3" aria-pressed="false" aria-label="Extra large text size">A++</button>
+    </div>
+
+    <div class="ctrl-cluster" role="group" aria-label="Typeface">
+      <span class="ctrl-label" aria-hidden="true">Typeface</span>
+      <button class="ctrl-btn" data-font="serif"    aria-pressed="true"  aria-label="Serif typeface">Serif</button>
+      <button class="ctrl-btn" data-font="sans"     aria-pressed="false" aria-label="Sans-serif typeface">Sans</button>
+      <button class="ctrl-btn" data-font="dyslexia" aria-pressed="false" aria-label="Dyslexia-friendly typeface">Dyslexia</button>
+    </div>
+
+    <div class="ctrl-cluster" role="group" aria-label="Color theme">
+      <span class="ctrl-label" aria-hidden="true">Theme</span>
+      <button class="ctrl-btn" data-theme="light"    aria-pressed="true"  aria-label="Light theme">Light</button>
+      <button class="ctrl-btn" data-theme="dark"     aria-pressed="false" aria-label="Dark theme">Dark</button>
+      <button class="ctrl-btn" data-theme="contrast" aria-pressed="false" aria-label="High contrast theme">Contrast</button>
+    </div>
+
+  </div>
+</div>
+
+<main id="main">
+
+  <header class="page-header">
+    <h1 class="page-title">On Annotation</h1>
+    <p class="page-subtitle">A Handbook for Active Readers</p>
+    <div class="ann-legend" aria-label="Annotation color key" role="note">
+      <span class="ann-legend__label">Annotations:</span>
+      <span class="ann-legend__item ann-legend__item--note">
+        <span class="ann-legend__dot" aria-hidden="true"></span><span class="ann-legend__glyph" aria-hidden="true">!</span>Notes
+      </span>
+      <span class="ann-legend__item ann-legend__item--question">
+        <span class="ann-legend__dot" aria-hidden="true"></span><span class="ann-legend__glyph" aria-hidden="true">?</span>Questions
+      </span>
+      <span class="ann-legend__item ann-legend__item--advice">
+        <span class="ann-legend__dot" aria-hidden="true"></span><span class="ann-legend__glyph" aria-hidden="true">&#9733;</span>Advice
+      </span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       THE ARGUMENT
+       ============================================================ -->
+  <section id="argument" class="section" aria-labelledby="argument-heading">
+    <h2 class="sr-only" id="argument-heading">The Argument</h2>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p class="lede">Research estimates that at least <strong>80% of college-level tasks involve reading.</strong></p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--question" aria-hidden="true">
+          <span class="ann-symbol">?</span>
+          <p class="ann-text">Four out of five! This is why I try to emphasize skills over specific content.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Reading is a social activity: the exchange of information between two or more conscious, intelligent beings.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text ann-text--thesis">This is my thesis. Did you catch it?</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Do you consider yourself a good communicator, an engaging storyteller, a decent conversationalist? (If not, do you prefer to work thoughts out on the page?)</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Think about what makes for a worthwhile conversation. How do you know the person you're talking to is actually listening?</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Through their reactions, both verbal and nonverbal! They reply with relevant comments or questions. They make eye contact. They nod or smile or emote as circumstance dictates. They engage with you in dialogue.</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>If you're talking to someone and they stare back, vacant, neither responding to what you're saying nor moving the conversation in another direction, it's unnerving. It's antisocial, anti-intellectual, maybe even anti-human. Most of us find monologuing in front of an icy audience somewhat unpleasant. We crave connection when we speak.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--question" aria-hidden="true">
+          <svg class="ann-doodle ann-doodle--sloth" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 390" role="img" aria-label="A bored medieval marginalia sloth hanging from a branch">
+
+  <!-- Underdrawing -->
+  <ellipse cx="340" cy="168" rx="47" ry="47" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
+  <ellipse cx="340" cy="234" rx="67" ry="76" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
+  <path d="M280 79 C273 110 266 136 288 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
+  <path d="M400 79 C407 110 414 136 392 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
+
+  <!-- Branch -->
+  <path d="M152 79 C192 72 232 76 267 73 C296 71 321 75 340 73 C360 71 392 74 432 73 C469 72 499 75 529 74" stroke="var(--ornament-ink)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M156 83 C196 76 236 80 269 77 C298 75 323 79 340 77 C360 75 393 78 433 77" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.32" stroke-linecap="round"/>
+  <path d="M236 75 C238 65 246 66 244 76" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+  <path d="M240 76 C241 69 247 70 246 77" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.45" stroke-linecap="round"/>
+  <path d="M383 73 C385 63 393 64 391 74" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+  <path d="M387 74 C389 67 395 68 393 75" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.45" stroke-linecap="round"/>
+  <path d="M310 73 C312 68 317 69 315 74" stroke="var(--ornament-ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <path d="M459 74 C461 68 466 69 464 75" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M199 77 C200 72 204 73 202 78" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.55" stroke-linecap="round"/>
+  <path d="M490 75 C491 70 495 71 493 76" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.5" stroke-linecap="round"/>
+
+  <!-- Left arm -->
+  <path d="M278 79 L275 91 C271 108 268 125 267 137 C267 147 276 155 290 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M282 80 L279 93 C275 110 273 127 272 139 C272 149 280 157 294 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M263 75 C256 57 263 50 270 62" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M262 76 C259 61 264 53 269 63" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M273 72 C266 53 276 48 280 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M283 72 C277 53 288 50 290 63" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+
+  <!-- Right arm -->
+  <path d="M402 79 L405 91 C409 108 412 125 413 137 C413 147 404 155 390 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M398 80 L401 93 C405 110 407 127 408 139 C408 149 400 157 386 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M397 72 C390 53 400 48 404 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M407 72 C401 53 412 49 414 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M416 75 C411 56 422 52 423 65" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+
+  <!-- Body -->
+  <path d="M277 219 C274 234 274 251 278 265 C283 284 298 303 318 311 C328 315 334 308 340 308 C346 308 352 315 362 311 C382 303 397 284 402 265 C406 251 406 234 403 219 C398 199 382 183 362 177 C352 173 346 180 340 179 C334 180 328 173 318 177 C298 183 282 199 277 219 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M280 221 C277 236 277 253 281 267 C286 286 301 304 321 312" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <!-- Body hatching left -->
+  <path d="M285 211 C282 219 281 229 283 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M292 203 C288 214 287 226 289 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M301 197 C297 209 296 223 298 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M289 215 C286 223 285 231 288 238" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3"/>
+  <!-- Body hatching right -->
+  <path d="M395 211 C398 219 399 229 397 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M388 203 C392 214 393 226 391 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M379 197 C383 209 384 223 382 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <!-- Body fur -->
+  <path d="M309 291 C306 299 307 308 311 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M326 296 C323 305 324 313 328 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M340 298 C340 307 340 315 340 320" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M355 296 C358 305 357 313 353 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M371 291 C374 299 373 308 369 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+
+  <!-- Head -->
+  <path d="M298 166 C296 153 300 141 308 133 C318 123 330 118 340 118 C350 118 362 123 372 133 C380 141 384 153 382 166 C383 179 379 193 370 201 C360 210 350 214 340 214 C330 214 320 210 310 201 C301 193 297 179 298 166 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M301 169 C299 156 303 144 311 136 C321 126 332 121 340 121" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.22" stroke-linecap="round"/>
+  <path d="M374 151 C378 158 379 166 376 173" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
+  <path d="M377 159 C381 166 381 174 378 180" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
+  <path d="M303 153 C299 160 299 168 302 173" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.32"/>
+
+  <!-- Eye patches -->
+  <path d="M306 163 C308 154 315 150 323 151 C330 152 337 157 336 164 C335 171 328 175 320 174 C313 173 306 171 306 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+  <path d="M344 163 C346 154 353 150 360 151 C367 152 375 157 374 164 C373 171 366 175 358 174 C351 173 344 171 344 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+
+  <!-- Left eye -->
+  <ellipse cx="321" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
+  <circle cx="321" cy="165" r="2.9" fill="var(--ornament-ink)"/>
+  <circle cx="319" cy="163" r="0.9" fill="white"/>
+  <path d="M314 162 Q321 154 328 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
+  <path d="M314 168 Q321 171 328 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Right eye -->
+  <ellipse cx="358" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
+  <circle cx="358" cy="165" r="2.9" fill="var(--ornament-ink)"/>
+  <circle cx="356" cy="163" r="0.9" fill="white"/>
+  <path d="M351 162 Q358 154 365 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
+  <path d="M351 168 Q358 171 365 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Nose -->
+  <path d="M335 180 C336 176 339 174 341 174 C344 174 347 176 345 180 C344 184 340 185 338 184 C336 183 334 182 335 180 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.6"/>
+
+  <!-- Mouth -->
+  <path d="M328 193 C332 191 337 190 340 190 C343 190 348 191 352 193" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M328 193 C325 197 325 201 327 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+  <path d="M352 193 C355 197 355 201 353 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+
+  <!-- Left leg -->
+  <path d="M308 303 L305 315 C301 328 297 337 294 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M294 345 C283 340 280 348 287 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M294 345 C287 354 289 362 295 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M294 345 C297 354 302 359 308 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+
+  <!-- Right leg -->
+  <path d="M372 303 L375 315 C379 328 383 337 386 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M386 345 C397 340 400 348 393 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M386 345 C393 354 391 362 385 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M386 345 C383 354 378 359 372 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+
+  <!-- Stray marks -->
+  <path d="M296 176 C293 173 291 176 293 178" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.32" stroke-linecap="round"/>
+  <path d="M383 233 C387 230 387 235 384 235" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M312 258 C310 253 314 250 316 253 C318 256 315 259 312 258" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28"/>
+  <path d="M366 248 C369 245 370 250 367 250" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.25" stroke-linecap="round"/>
+  <path d="M323 290 C321 287 319 290 321 291" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3" stroke-linecap="round"/>
+
+</svg>
+          <p class="ann-text">If you "read" by moving your eyes across a page until they hit punctuation, you're the equivalent of a conversational partner who's only listening to know when they can start talking.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Have you ever spoken with somebody who doesn't seem to retain anything you're saying&#8202;&#8212;&#8202;someone who doesn't seem to be listening, but is definitely waiting for you to stop talking?</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Doesn't feel good, does it? Feels like what you have to say is mere noise. Feels like you're an ordeal to be endured, not a human being with something urgent to share.</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>The same principle applies to reading. <strong>Annotation is a dialogue between you and a text.</strong> Reading is a social activity.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text">Restating the thesis, this time with a bit more context.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <div class="divider" aria-hidden="true"><svg class="divider-asset" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262 20" aria-hidden="true" focusable="false">
+  <path d="M5 10 C35 8 80 5 128 5.5 C176 6 218 8 255 11 C222 13 178 16 128 15 C80 14 35 12 5 10 Z" fill="var(--ornament-ink)" opacity="0.70"/>
+  <circle cx="5" cy="10" r="2.2" fill="var(--ornament-ink)" opacity="0.65"/>
+  <path d="M255 11 C257 10 259 10 261 10" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.42"/>
+</svg></div>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WHY BOTHER
+       ============================================================ -->
+  <section id="why-bother" class="section" aria-labelledby="why-bother-heading">
+
+    <div class="reading-row">
+      <div class="text-col">
+        <h2 class="section-heading" id="why-bother-heading">Why should you annotate?</h2>
+      </div>
+      <div class="ann-col">
+        <aside class="margin-ornament" aria-hidden="true">
+          <svg class="ornament-asset" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124 76" role="img" aria-label="A manicule: a pointing hand with a cuffed sleeve indicating important text">
+  <path d="M6 12 C5 11 5 10 8 10 L38 10 L38 62 L8 62 C5 62 5 61 6 60 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6 22 L38 22" stroke="var(--ornament-ink)" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M7 26 L38 26" stroke="var(--ornament-ink)" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+  <path d="M9 36 C10 43 10 52 9 57" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.32" stroke-linecap="round"/>
+  <path d="M16 38 C17 45 17 54 16 59" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.26" stroke-linecap="round"/>
+  <path d="M23 39 C24 46 24 55 23 60" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.22" stroke-linecap="round"/>
+  <path d="M37 16 L76 16 C80 16 82 20 82 24 L82 52 C82 56 80 60 76 60 L37 60 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 18 L74 18" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.22" stroke-linecap="round"/>
+  <path d="M46 16 C46 10 52 8 56 12" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M57 16 C57 9 63 7 67 11" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M68 16 C68 11 74 10 77 14" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M82 22 C90 20 104 22 114 27 C118 29 119 33 117 37 C115 41 111 43 106 43 C96 43 88 42 82 40 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M92 21 C92 18 95 17 98 19" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+  <path d="M107 23 C113 24 118 28 117 33 C116 38 112 42 108 43" stroke="var(--ornament-ink)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+  <path d="M48 60 C46 66 47 74 54 74 C60 74 62 67 60 60" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M51 72 C54 74 59 74 61 71" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.48"/>
+  <path d="M44 30 C42 27 41 30 43 31" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M78 46 C76 43 75 46 77 47" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" opacity="0.25" stroke-linecap="round"/>
+</svg>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Annotation allows you to <span class="mark-yellow">identify key ideas</span> in real-time, improving recall and <span class="mark-blue">retention</span>.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--advice" aria-hidden="true">
+          <span class="ann-symbol">&#9733;</span>
+          <p class="ann-text">If you only take a single point from this, make it this one.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Annotation provides you with an opportunity to append your <span class="ann-mark--underline">running commentary</span> to a text, creating a snapshot of your own reaction.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text">Annotate a favorite book, stick it on a shelf, come back to it every now and again. You'll learn more about the text, the world, and yourself, even if you don't recognize the person who wrote those notes.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Annotation encourages you to ask and answer your own questions as you read, prioritizing your own understanding.</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Annotation is a <span class="ann-mark--underline">temporal investment</span>. Yes, you'll spend more time with the text up front, but this time will return to you, bearing dividends, when you needn't hustle to locate the most important components of that text a second, third, fourth, fifth time.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">$</span>
+          <p class="ann-text">Compound interest: key to accruing both wealth and knowledge.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <div class="divider" aria-hidden="true"><svg class="divider-asset" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262 20" aria-hidden="true" focusable="false">
+  <path d="M5 10 C35 8 80 5 128 5.5 C176 6 218 8 255 11 C222 13 178 16 128 15 C80 14 35 12 5 10 Z" fill="var(--ornament-ink)" opacity="0.70"/>
+  <circle cx="5" cy="10" r="2.2" fill="var(--ornament-ink)" opacity="0.65"/>
+  <path d="M255 11 C257 10 259 10 261 10" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.42"/>
+</svg></div>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       BEFORE YOU BEGIN
+       ============================================================ -->
+  <section id="before-you-begin" class="section" aria-labelledby="before-you-begin-heading">
+
+    <div class="reading-row">
+      <div class="text-col">
+        <h2 class="section-heading" id="before-you-begin-heading">Before you begin</h2>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>I don't want to prescribe a specific approach to annotation. The key is finding a system that works for you. That said, there are a few universal guidelines and a toolbox full of reliable strategies for you to rifle through.</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Let's start with some pointers.</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p><strong>First,</strong> <span class="mark-red">favor physical texts over digital versions whenever possible</span>. If you prefer using markup tools on a computer, fair enough, but there's value in printing an article out or writing up notes on a separate sheet as you read.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--advice" aria-hidden="true">
+          <svg class="ann-doodle ann-doodle--pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124 76" role="img" aria-label="A manicule: a pointing hand with a cuffed sleeve indicating important text">
+  <path d="M6 12 C5 11 5 10 8 10 L38 10 L38 62 L8 62 C5 62 5 61 6 60 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6 22 L38 22" stroke="var(--ornament-ink)" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M7 26 L38 26" stroke="var(--ornament-ink)" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+  <path d="M9 36 C10 43 10 52 9 57" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.32" stroke-linecap="round"/>
+  <path d="M16 38 C17 45 17 54 16 59" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.26" stroke-linecap="round"/>
+  <path d="M23 39 C24 46 24 55 23 60" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.22" stroke-linecap="round"/>
+  <path d="M37 16 L76 16 C80 16 82 20 82 24 L82 52 C82 56 80 60 76 60 L37 60 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 18 L74 18" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.22" stroke-linecap="round"/>
+  <path d="M46 16 C46 10 52 8 56 12" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M57 16 C57 9 63 7 67 11" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M68 16 C68 11 74 10 77 14" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M82 22 C90 20 104 22 114 27 C118 29 119 33 117 37 C115 41 111 43 106 43 C96 43 88 42 82 40 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M92 21 C92 18 95 17 98 19" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+  <path d="M107 23 C113 24 118 28 117 33 C116 38 112 42 108 43" stroke="var(--ornament-ink)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+  <path d="M48 60 C46 66 47 74 54 74 C60 74 62 67 60 60" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M51 72 C54 74 59 74 61 71" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.48"/>
+  <path d="M44 30 C42 27 41 30 43 31" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M78 46 C76 43 75 46 77 47" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" opacity="0.25" stroke-linecap="round"/>
+</svg>
+          <p class="ann-text">Wholly subjective, I know, but backed by research and years of student feedback. If it's worth your time, it's also worth a few sheets of paper.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p><strong>Second,</strong> whenever you take up a text, <span class="ann-mark--underline">start with a purpose</span>. Ask yourself: why am I reading this? What do I hope to get out of it? What goal do I want to meet by the time I put this down?</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text">This habit alone separates scholars from students. It also claws back hours of time and answers the eternal question ("Why are we doing this?").</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p><strong>Third,</strong> always finish reading before you annotate. Don't read with your pen in hand. Give yourself a little time to process information before you interact with it. Work at the level of the paragraph (in a dense text) or the page (if it's a bit breezier) as you annotate.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--advice" aria-hidden="true">
+          <span class="ann-symbol">&#9733;</span>
+          <p class="ann-text">You, like me, will catch yourself reading with a pencil in hand anyway. Resist temptation; use it with restraint.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <div class="divider" aria-hidden="true"><svg class="divider-asset" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262 20" aria-hidden="true" focusable="false">
+  <path d="M5 10 C35 8 80 5 128 5.5 C176 6 218 8 255 11 C222 13 178 16 128 15 C80 14 35 12 5 10 Z" fill="var(--ornament-ink)" opacity="0.70"/>
+  <circle cx="5" cy="10" r="2.2" fill="var(--ornament-ink)" opacity="0.65"/>
+  <path d="M255 11 C257 10 259 10 261 10" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.42"/>
+</svg></div>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MARK IT UP
+       ============================================================ -->
+  <section id="mark-it-up" class="section" aria-labelledby="mark-it-up-heading">
+
+    <div class="reading-row">
+      <div class="text-col">
+        <h2 class="section-heading" id="mark-it-up-heading">Toolbox time!</h2>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>When you annotate, you perform two basic tasks: you mark up the text and you write original notes. These exist in balance, but your notes should receive the majority of your time and attention.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <svg class="ann-doodle ann-doodle--scale" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148 136" role="img" aria-label="A tilted balance scale with a weight in the heavier pan">
+  <path d="M57 130 L88 130" stroke="var(--ornament-ink)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <path d="M72 130 C72 130 71 118 72 100" stroke="var(--ornament-ink)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <path d="M74 128 C74 118 74 108 73 100" stroke="var(--ornament-ink)" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.28"/>
+  <path d="M61 100 L83 100 L72 87 Z" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linejoin="round"/>
+  <path d="M65 100 L72 90" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.3" stroke-linecap="round"/>
+  <path d="M72 87 C71 75 72 62 72 52" stroke="var(--ornament-ink)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+  <path d="M16 64 C36 60 55 56 72 52 C89 48 107 46 130 40" stroke="var(--ornament-ink)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+  <path d="M18 66 C38 62 57 58 72 54 C89 50 107 48 128 42" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.3" stroke-linecap="round"/>
+  <path d="M17 65 C15 72 13 79 13 88" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+  <path d="M129 41 C131 48 132 55 132 64" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+  <path d="M3 91 C6 84 20 84 24 91" stroke="var(--ornament-ink)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <path d="M4 91 L23 91" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.35"/>
+  <ellipse cx="13" cy="89" rx="7.5" ry="4.5" fill="var(--ornament-ink)" opacity="0.22"/>
+  <ellipse cx="13" cy="89" rx="7.5" ry="4.5" stroke="var(--ornament-ink)" stroke-width="1.8" fill="none"/>
+  <path d="M10 88 C12 86 15 87 16 89" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.55"/>
+  <path d="M122 67 C125 60 139 60 143 67" stroke="var(--ornament-ink)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <path d="M123 67 L142 67" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.35"/>
+  <path d="M72 68 C70 65 69 68 70 69" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M59 130 C60 127 63 128 62 130" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" opacity="0.25" stroke-linecap="round"/>
+  <path d="M131 57 C133 54 134 57 132 58" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.25" stroke-linecap="round"/>
+</svg>
+          <p class="ann-text">We write to learn what we think, know, and understand. Note-taking takes more time than other annotation strategies.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Let's start with markup tools, which help draw attention to key parts of the text. Common approaches include highlighting, underlining, bracketing, drawing <span class="ann-mark--box">boxes</span>, adding arrows, and placing symbols&#8202;&#8212;&#8202;like asterisks, daggers, exclamation points, and question marks&#8202;&#8212;&#8202;directly in the text.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text">Yes, the box around "boxes" is a bit redundant, but it shows the tool at work. You won't have any trouble finding this again, will you?</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Markup tools typically target <span class="mark-yellow">key words and phrases</span>, important passages, <span class="mark-blue">unfamiliar vocabulary</span>, and any other material that catches your attention. They also seek out supporting details: facts, figures, statistics, quotes, <span class="mark-blue">paraphrases</span>, summaries, and anecdotal evidence. Markups make spotting these features easier the next time you're looking for them.</p>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>You don't need to use all of these tools. Don't get in your own way! Pick a few that work and stick with them. Likewise, strive to avoid overusing the tools you do rely on.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--advice" aria-hidden="true">
+          <span class="ann-symbol">&#9733;</span>
+          <p class="ann-text">Around the house, I use my drill, hammer, and socket wrench on a regular basis. I use my power washer once a year. Infrequent use doesn't always warrant disposal.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Mark up text after you've finished reading it. When highlighting or underlining, limit yourself to just one phrase or sentence per paragraph. Unless you're identifying a thesis, favor words and phrases over whole sentences.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text">A page that's 85% yellow signals insecurity: whoever's reading it can't tell what's most important.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col ann-bracket-para">
+        <p><span class="ann-mark--underline">Color-code your markings</span>: for instance, you may highlight new vocabulary in <span class="mark-blue">blue</span> and key words in <span class="mark-yellow">yellow</span>. You might use exclamation points to identify surprising evidence and question marks to indicate skepticism toward an author's claim. Again, what matters is developing a system that works for you.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--advice" aria-hidden="true">
+          <span class="ann-symbol">&#9733;</span>
+          <p class="ann-text">One clever system, for what it's worth: yellow for key information, blue for unfamiliar words or ideas, red for anything you disagree with.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <div class="divider" aria-hidden="true"><svg class="divider-asset" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262 20" aria-hidden="true" focusable="false">
+  <path d="M5 10 C35 8 80 5 128 5.5 C176 6 218 8 255 11 C222 13 178 16 128 15 C80 14 35 12 5 10 Z" fill="var(--ornament-ink)" opacity="0.70"/>
+  <circle cx="5" cy="10" r="2.2" fill="var(--ornament-ink)" opacity="0.65"/>
+  <path d="M255 11 C257 10 259 10 261 10" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.42"/>
+</svg></div>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WRITE YOUR NOTES
+       ============================================================ -->
+  <section id="write-your-notes" class="section" aria-labelledby="write-your-notes-heading">
+
+    <div class="reading-row">
+      <div class="text-col">
+        <h2 class="section-heading" id="write-your-notes-heading">On to notes!</h2>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Wherever possible, interrupt a text with your own voice. Place your thoughts and observations directly on the page. If you can't write on the page, use a notebook, loose-leaf paper, or sticky notes.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text">Mark to notice; write a note to understand why it's worth noticing.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Notes can do more heavy lifting than other markup tools. Your notes can: <span class="mark-blue">paraphrase</span> key info, reinforce important insights, ask and answer questions, <span class="ann-mark--underline">connect what you're reading to prior knowledge</span>, predict or extend an author's argument, make personal connections to the text, and summarize dense materials. Always include a summary at the end of important paragraphs, sections, or pages.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--question" aria-hidden="true">
+          <span class="ann-symbol">&#8593;</span>
+          <p class="ann-text">This mirrors the opening section's conversation analogy. Did you make the connection? Good annotation makes patterns visible.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>Take a <span class="ann-mark--highlight">goldilocks approach</span> to notes while annotating: go beyond a few words or phrases, but avoid longwinded responses. The sweet spot is somewhere between a sentence fragment and a few sentences.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <span class="ann-symbol">!</span>
+          <p class="ann-text">The "too-little" failure looks like "explains how parthenogenesis works!" The "too-much" failure looks like a draft of the essay you haven't started. Aspire to draft a sentence that will mean something to you at midnight the week before the paper is due.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <p>What should an annotation contain? It's glib, but an honest answer is whatever information you think you might want later.</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--question" aria-hidden="true">
+          <span class="ann-symbol">?</span>
+          <p class="ann-text">What would future you, frenzied and overburdened, want to find here?</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="reading-row">
+      <div class="text-col">
+        <div class="divider" aria-hidden="true"><svg class="divider-asset" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262 20" aria-hidden="true" focusable="false">
+  <path d="M5 10 C35 8 80 5 128 5.5 C176 6 218 8 255 11 C222 13 178 16 128 15 C80 14 35 12 5 10 Z" fill="var(--ornament-ink)" opacity="0.70"/>
+  <circle cx="5" cy="10" r="2.2" fill="var(--ornament-ink)" opacity="0.65"/>
+  <path d="M255 11 C257 10 259 10 261 10" stroke="var(--ornament-ink)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.42"/>
+</svg></div>
+      </div>
+      <div class="ann-col"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GET OUT THERE
+       ============================================================ -->
+  <section id="get-out-there" class="section" aria-labelledby="get-out-there-heading">
+    <h2 class="sr-only" id="get-out-there-heading">Get Out There</h2>
+
+    <div class="reading-row">
+      <div class="text-col coda">
+        <p>Get out there and give it a whirl! It might take some trial and error to create a system that works for you, but <span class="mark-blue">marginalia</span> can't help but respect your boundaries!</p>
+      </div>
+      <div class="ann-col">
+        <aside class="annotation annotation--note" aria-hidden="true">
+          <p class="ann-text">I mean it! Your first attempt will be imperfect and slightly embarrassing, and that's completely fine. Make a habit of annotating and it will eventually solidify into a system.</p>
+          <svg class="ann-doodle ann-doodle--sloth-end" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 390" role="img" aria-label="A bored medieval marginalia sloth hanging from a branch">
+
+  <!-- Underdrawing -->
+  <ellipse cx="340" cy="168" rx="47" ry="47" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
+  <ellipse cx="340" cy="234" rx="67" ry="76" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
+  <path d="M280 79 C273 110 266 136 288 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
+  <path d="M400 79 C407 110 414 136 392 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
+
+  <!-- Branch -->
+  <path d="M152 79 C192 72 232 76 267 73 C296 71 321 75 340 73 C360 71 392 74 432 73 C469 72 499 75 529 74" stroke="var(--ornament-ink)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M156 83 C196 76 236 80 269 77 C298 75 323 79 340 77 C360 75 393 78 433 77" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.32" stroke-linecap="round"/>
+  <path d="M236 75 C238 65 246 66 244 76" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+  <path d="M240 76 C241 69 247 70 246 77" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.45" stroke-linecap="round"/>
+  <path d="M383 73 C385 63 393 64 391 74" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+  <path d="M387 74 C389 67 395 68 393 75" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.45" stroke-linecap="round"/>
+  <path d="M310 73 C312 68 317 69 315 74" stroke="var(--ornament-ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <path d="M459 74 C461 68 466 69 464 75" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M199 77 C200 72 204 73 202 78" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.55" stroke-linecap="round"/>
+  <path d="M490 75 C491 70 495 71 493 76" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.5" stroke-linecap="round"/>
+
+  <!-- Left arm -->
+  <path d="M278 79 L275 91 C271 108 268 125 267 137 C267 147 276 155 290 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M282 80 L279 93 C275 110 273 127 272 139 C272 149 280 157 294 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M263 75 C256 57 263 50 270 62" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M262 76 C259 61 264 53 269 63" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M273 72 C266 53 276 48 280 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M283 72 C277 53 288 50 290 63" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+
+  <!-- Right arm -->
+  <path d="M402 79 L405 91 C409 108 412 125 413 137 C413 147 404 155 390 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M398 80 L401 93 C405 110 407 127 408 139 C408 149 400 157 386 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M397 72 C390 53 400 48 404 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M407 72 C401 53 412 49 414 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+  <path d="M416 75 C411 56 422 52 423 65" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
+
+  <!-- Body -->
+  <path d="M277 219 C274 234 274 251 278 265 C283 284 298 303 318 311 C328 315 334 308 340 308 C346 308 352 315 362 311 C382 303 397 284 402 265 C406 251 406 234 403 219 C398 199 382 183 362 177 C352 173 346 180 340 179 C334 180 328 173 318 177 C298 183 282 199 277 219 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M280 221 C277 236 277 253 281 267 C286 286 301 304 321 312" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <!-- Body hatching left -->
+  <path d="M285 211 C282 219 281 229 283 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M292 203 C288 214 287 226 289 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M301 197 C297 209 296 223 298 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M289 215 C286 223 285 231 288 238" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3"/>
+  <!-- Body hatching right -->
+  <path d="M395 211 C398 219 399 229 397 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M388 203 C392 214 393 226 391 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <path d="M379 197 C383 209 384 223 382 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
+  <!-- Body fur -->
+  <path d="M309 291 C306 299 307 308 311 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M326 296 C323 305 324 313 328 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M340 298 C340 307 340 315 340 320" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M355 296 C358 305 357 313 353 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+  <path d="M371 291 C374 299 373 308 369 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
+
+  <!-- Head -->
+  <path d="M298 166 C296 153 300 141 308 133 C318 123 330 118 340 118 C350 118 362 123 372 133 C380 141 384 153 382 166 C383 179 379 193 370 201 C360 210 350 214 340 214 C330 214 320 210 310 201 C301 193 297 179 298 166 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M301 169 C299 156 303 144 311 136 C321 126 332 121 340 121" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.22" stroke-linecap="round"/>
+  <path d="M374 151 C378 158 379 166 376 173" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
+  <path d="M377 159 C381 166 381 174 378 180" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
+  <path d="M303 153 C299 160 299 168 302 173" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.32"/>
+
+  <!-- Eye patches -->
+  <path d="M306 163 C308 154 315 150 323 151 C330 152 337 157 336 164 C335 171 328 175 320 174 C313 173 306 171 306 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+  <path d="M344 163 C346 154 353 150 360 151 C367 152 375 157 374 164 C373 171 366 175 358 174 C351 173 344 171 344 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+
+  <!-- Left eye -->
+  <ellipse cx="321" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
+  <circle cx="321" cy="165" r="2.9" fill="var(--ornament-ink)"/>
+  <circle cx="319" cy="163" r="0.9" fill="white"/>
+  <path d="M314 162 Q321 154 328 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
+  <path d="M314 168 Q321 171 328 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Right eye -->
+  <ellipse cx="358" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
+  <circle cx="358" cy="165" r="2.9" fill="var(--ornament-ink)"/>
+  <circle cx="356" cy="163" r="0.9" fill="white"/>
+  <path d="M351 162 Q358 154 365 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
+  <path d="M351 168 Q358 171 365 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- Nose -->
+  <path d="M335 180 C336 176 339 174 341 174 C344 174 347 176 345 180 C344 184 340 185 338 184 C336 183 334 182 335 180 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.6"/>
+
+  <!-- Mouth -->
+  <path d="M328 193 C332 191 337 190 340 190 C343 190 348 191 352 193" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+  <path d="M328 193 C325 197 325 201 327 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+  <path d="M352 193 C355 197 355 201 353 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+
+  <!-- Left leg -->
+  <path d="M308 303 L305 315 C301 328 297 337 294 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M294 345 C283 340 280 348 287 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M294 345 C287 354 289 362 295 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M294 345 C297 354 302 359 308 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+
+  <!-- Right leg -->
+  <path d="M372 303 L375 315 C379 328 383 337 386 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M386 345 C397 340 400 348 393 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M386 345 C393 354 391 362 385 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M386 345 C383 354 378 359 372 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+
+  <!-- Stray marks -->
+  <path d="M296 176 C293 173 291 176 293 178" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.32" stroke-linecap="round"/>
+  <path d="M383 233 C387 230 387 235 384 235" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.28" stroke-linecap="round"/>
+  <path d="M312 258 C310 253 314 250 316 253 C318 256 315 259 312 258" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28"/>
+  <path d="M366 248 C369 245 370 250 367 250" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.25" stroke-linecap="round"/>
+  <path d="M323 290 C321 287 319 290 321 291" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3" stroke-linecap="round"/>
+
+</svg>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    'use strict';
+
+    var body          = document.body;
+    var toggleBtn     = document.getElementById('annotation-toggle');
+    var toggleLabel   = document.getElementById('toggle-label');
+    var announcement  = document.getElementById('toggle-announcement');
+    var navLinks      = document.querySelectorAll('.site-header__nav a');
+    var sections      = Array.from(document.querySelectorAll('section[id]'));
+    var settingsBtn   = document.getElementById('settings-btn');
+    var settingsPanel = document.getElementById('settings-panel');
+    var annotations   = document.querySelectorAll('aside.annotation, aside.margin-ornament');
+
+    /* ------------------------------------------------------------------
+       Settings Panel
+    ------------------------------------------------------------------ */
+    function toggleSettingsPanel(open) {
+      settingsPanel.classList.toggle('is-open', open);
+      settingsBtn.setAttribute('aria-expanded', String(open));
+      settingsPanel.setAttribute('aria-hidden', String(!open));
+    }
+
+    settingsBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleSettingsPanel(!settingsPanel.classList.contains('is-open'));
+    });
+
+    document.addEventListener('click', function (e) {
+      if (settingsPanel.classList.contains('is-open') &&
+          !settingsPanel.contains(e.target) &&
+          !settingsBtn.contains(e.target)) {
+        toggleSettingsPanel(false);
+      }
+    });
+
+    /* ------------------------------------------------------------------
+       Annotation Toggle
+    ------------------------------------------------------------------ */
+    function setAnnotations(visible) {
+      body.classList.toggle('annotations-visible', visible);
+      if (toggleBtn)    toggleBtn.setAttribute('aria-pressed', String(visible));
+      if (toggleLabel)  toggleLabel.textContent = visible ? 'Hide Annotations' : 'Show Annotations';
+      localStorage.setItem('ann_annotations', visible ? '1' : '0');
+      annotations.forEach(function (el) {
+        el.setAttribute('aria-hidden', String(!visible));
+      });
+      if (announcement) {
+        announcement.textContent = visible
+          ? 'Annotations and highlights visible.'
+          : 'Annotations and highlights hidden.';
+        setTimeout(function () { announcement.textContent = ''; }, 1500);
+      }
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        setAnnotations(!body.classList.contains('annotations-visible'));
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        setAnnotations(!body.classList.contains('annotations-visible'));
+        if (toggleBtn) toggleBtn.focus();
+      }
+    });
+
+    /* ------------------------------------------------------------------
+       Text Size
+    ------------------------------------------------------------------ */
+    var sizeBtns = document.querySelectorAll('[data-size]');
+    function setSize(n) {
+      var root = document.documentElement;
+      root.classList.remove('text-size-1', 'text-size-2', 'text-size-3');
+      root.classList.add('text-size-' + n);
+      sizeBtns.forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(parseInt(btn.dataset.size, 10) === n));
+      });
+      localStorage.setItem('ann_size', n);
+    }
+    sizeBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setSize(parseInt(btn.dataset.size, 10));
+      });
+    });
+
+    /* ------------------------------------------------------------------
+       Font
+    ------------------------------------------------------------------ */
+    var fontBtns = document.querySelectorAll('[data-font]');
+    function setFont(name) {
+      body.classList.remove('font-sans', 'font-dyslexia');
+      if (name !== 'serif') body.classList.add('font-' + name);
+      fontBtns.forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.dataset.font === name));
+      });
+      localStorage.setItem('ann_font', name);
+    }
+    fontBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () { setFont(btn.dataset.font); });
+    });
+
+    /* ------------------------------------------------------------------
+       Theme (light / dark / contrast)
+    ------------------------------------------------------------------ */
+    var themeBtns = document.querySelectorAll('[data-theme]');
+    function setTheme(name) {
+      body.classList.remove('theme-dark', 'theme-contrast');
+      if (name !== 'light') body.classList.add('theme-' + name);
+      themeBtns.forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.dataset.theme === name));
+      });
+      localStorage.setItem('ann_theme', name);
+    }
+    themeBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () { setTheme(btn.dataset.theme); });
+    });
+
+    /* ------------------------------------------------------------------
+       Restore Preferences
+    ------------------------------------------------------------------ */
+    (function restorePrefs() {
+      var savedAnn   = localStorage.getItem('ann_annotations');
+      var savedSize  = localStorage.getItem('ann_size');
+      var savedFont  = localStorage.getItem('ann_font');
+      var savedTheme = localStorage.getItem('ann_theme');
+      setAnnotations(savedAnn === '1');
+      setSize(savedSize ? parseInt(savedSize, 10) : 1);
+      setFont(savedFont  || 'serif');
+      setTheme(savedTheme || 'light');
+    })();
+
+    /* ------------------------------------------------------------------
+       Scroll Spy
+    ------------------------------------------------------------------ */
+    function updateActiveSection() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var offset    = 160;
+      var current   = '';
+      sections.forEach(function (section) {
+        if (section.offsetTop - offset <= scrollTop) current = section.id;
+      });
+      navLinks.forEach(function (link) {
+        link.classList.toggle('is-active',
+          link.getAttribute('href').replace('#', '') === current);
+      });
+    }
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          updateActiveSection();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateActiveSection();
+  })();
+</script>
+</body>
+</html>
