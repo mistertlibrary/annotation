@@ -608,6 +608,24 @@
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M44 8 C26 7 9 16 7 29 C5 42 24 51 70 53 C128 55 178 49 191 36 C199 28 193 16 168 11 C140 6 96 5 52 9 C40 10 28 13 22 18' fill='none' stroke='%23BF0000' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
     }
 
+    /* Flag mark: an in-text symbol (!, ?, or ★) placed after a phrase,
+       mirroring the sidebar ann-symbol vocabulary so a flagged phrase in
+       the body text reads as the same system as the margin notes — this
+       is the "placing symbols directly in the text" technique the prose
+       itself describes, now actually demonstrated on the page. */
+    body.annotations-visible .ann-mark--flag::after {
+      content: attr(data-glyph);
+      font-family: var(--font-display);
+      font-weight: 700;
+      margin-left: 0.15em;
+      font-size: 0.85em;
+      vertical-align: super;
+      line-height: 0;
+    }
+    body.annotations-visible .ann-mark--flag[data-glyph="!"]::after { color: var(--color-slate); }
+    body.annotations-visible .ann-mark--flag[data-glyph="?"]::after { color: var(--color-rust); }
+    body.annotations-visible .ann-mark--flag[data-glyph="★"]::after { color: var(--color-advice); }
+
     /* ==========================================================================
        11. RESPONSIVE BREAKPOINTS
        ========================================================================== */
@@ -697,6 +715,7 @@
         border-radius: 50% !important;
         padding: 0.05em 0.4em !important;
       }
+      .ann-mark--flag::after { color: #000 !important; }
 
       .ann-legend {
         max-height: none !important; opacity: 1 !important;
@@ -726,6 +745,7 @@
         border-radius: 0 !important;
         padding: 0 !important;
       }
+      body.worksheet-mode .ann-mark--flag::after { content: none !important; }
       body.worksheet-mode .ann-bracket-para {
         border-left: none !important;
         padding-left: 0 !important;
@@ -890,7 +910,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p class="lede">Research estimates that at least <strong><span class="ann-mark--circle">80% of college-level tasks</span></strong> involve reading.</p>
+        <p class="lede">Research estimates that at least <strong><span class="ann-mark--circle">80% of college-level tasks</span></strong> <span class="ann-mark--flag" data-glyph="?">involve reading</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--question" aria-hidden="true">
@@ -902,7 +922,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Reading is a social activity: the exchange of information between two or more conscious, intelligent beings.</p>
+        <p>Reading is a social activity: the exchange of information between two or more <span class="ann-mark--flag" data-glyph="!">conscious, intelligent beings</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -935,7 +955,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>If you're talking to someone and they stare back, vacant, neither responding to what you're saying nor moving the conversation in another direction, it's unnerving. It's antisocial, anti-intellectual, maybe even anti-human. Most of us find monologuing in front of an icy audience somewhat unpleasant. We crave connection when we speak.</p>
+        <p>If you're talking to someone and they stare back, vacant, neither responding to what you're saying nor moving the conversation in another direction, it's unnerving. It's antisocial, anti-intellectual, maybe even anti-human. Most of us find <span class="ann-mark--flag" data-glyph="?">monologuing in front of an icy audience</span> somewhat unpleasant. We crave connection when we speak.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--question" aria-hidden="true">
@@ -1035,7 +1055,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>The same principle applies to reading. <strong>Annotation is a dialogue between you and a text.</strong> Reading is a social activity.</p>
+        <p>The same principle applies to reading. <strong><span class="ann-mark--flag" data-glyph="!">Annotation is a dialogue between you and a text.</span></strong> Reading is a social activity.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1091,7 +1111,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Annotation allows you to <span class="mark-yellow">identify key ideas</span> in real-time, improving recall and <span class="mark-blue">retention</span>.</p>
+        <p>Annotation allows you to <span class="mark-yellow">identify key ideas</span> in real-time, improving <span class="ann-mark--flag" data-glyph="★">recall and <span class="mark-blue">retention</span></span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--advice" aria-hidden="true">
@@ -1103,7 +1123,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Annotation provides you with an opportunity to append your <span class="ann-mark--underline">running commentary</span> to a text, creating a snapshot of your own reaction.</p>
+        <p>Annotation provides you with an opportunity to append your <span class="ann-mark--underline">running commentary</span> to a text, creating a <span class="ann-mark--flag" data-glyph="!">snapshot of your own reaction</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1122,7 +1142,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Annotation is a <span class="ann-mark--underline">temporal investment</span>. Yes, you'll spend more time with the text up front, but this time will return to you, bearing dividends, when you needn't hustle to locate the most important components of that text a second, third, fourth, fifth time.</p>
+        <p>Annotation is a <span class="ann-mark--underline">temporal investment</span>. Yes, you'll spend more time with the text up front, but this time will return to you, <span class="ann-mark--flag" data-glyph="!">bearing dividends</span>, when you needn't hustle to locate the most important components of that text a second, third, fourth, fifth time.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1202,7 +1222,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p><strong>First,</strong> <span class="mark-red">favor physical texts over digital versions whenever possible</span>. If you prefer using markup tools on a computer, fair enough, but there's value in printing an article out or writing up notes on a separate sheet as you read.</p>
+        <p><strong>First,</strong> <span class="mark-red">favor physical texts over digital versions whenever possible</span>. If you prefer using markup tools on a computer, fair enough, but <span class="ann-mark--flag" data-glyph="★">there's value in printing an article out or writing up notes on a separate sheet as you read</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--advice" aria-hidden="true">
@@ -1230,7 +1250,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p><strong>Second,</strong> whenever you take up a text, <span class="ann-mark--underline">start with a purpose</span>. Ask yourself: why am I reading this? What do I hope to get out of it? What goal do I want to meet by the time I put this down?</p>
+        <p><strong>Second,</strong> whenever you take up a text, <span class="ann-mark--underline">start with a purpose</span>. Ask yourself: <span class="ann-mark--flag" data-glyph="!">why am I reading this</span>? What do I hope to get out of it? What goal do I want to meet by the time I put this down?</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1268,7 +1288,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p><strong>Third,</strong> always finish reading before you annotate. Don't read with your pen in hand. Give yourself a little time to process information before you interact with it. Work at the level of the paragraph (in a dense text) or the page (if it's a bit breezier) as you annotate.</p>
+        <p><strong>Third,</strong> always finish reading before you annotate. <span class="ann-mark--flag" data-glyph="★">Don't read with your pen in hand</span>. Give yourself a little time to process information before you interact with it. Work at the level of the paragraph (in a dense text) or the page (if it's a bit breezier) as you annotate.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--advice" aria-hidden="true">
@@ -1304,7 +1324,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>When you annotate, you perform two basic tasks: you mark up the text and you write original notes. These exist in balance, but your notes should receive the majority of your time and attention.</p>
+        <p>When you annotate, you perform two basic tasks: you mark up the text and you write original notes. These exist in balance, but <span class="ann-mark--flag" data-glyph="!">your notes should receive the majority of your time and attention</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1337,7 +1357,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Let's start with markup tools, which help draw attention to key parts of the text. Common approaches include highlighting, underlining, bracketing, drawing <span class="ann-mark--box">boxes</span>, adding arrows, and placing symbols&#8202;&#8212;&#8202;like asterisks, daggers, exclamation points, and question marks&#8202;&#8212;&#8202;directly in the text.</p>
+        <p>Let's start with markup tools, which help draw attention to key parts of the text. Common approaches include highlighting, underlining, bracketing, drawing <span class="ann-mark--box">boxes</span>, adding arrows, and placing <span class="ann-mark--flag" data-glyph="!">symbols&#8202;&#8212;&#8202;like asterisks, daggers, exclamation points, and question marks&#8202;&#8212;&#8202;directly in the text</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1356,7 +1376,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>You don't need to use all of these tools. Don't get in your own way! Pick a few that work and stick with them. Likewise, strive to avoid overusing the tools you do rely on.</p>
+        <p>You don't need to use all of these tools. Don't get in your own way! <span class="ann-mark--flag" data-glyph="★">Pick a few that work and stick with them</span>. Likewise, strive to avoid overusing the tools you do rely on.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--advice" aria-hidden="true">
@@ -1368,7 +1388,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Mark up text after you've finished reading it. When highlighting or underlining, limit yourself to just one phrase or sentence per paragraph. Unless you're identifying a thesis, favor words and phrases over whole sentences.</p>
+        <p>Mark up text after you've finished reading it. When highlighting or underlining, limit yourself to just one phrase or sentence per paragraph. Unless you're identifying a thesis, <span class="ann-mark--flag" data-glyph="!">favor words and phrases over whole sentences</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1380,7 +1400,7 @@
 
     <div class="reading-row">
       <div class="text-col ann-bracket-para">
-        <p><span class="ann-mark--underline">Color-code your markings</span>: for instance, you may highlight new vocabulary in <span class="mark-blue">blue</span> and key words in <span class="mark-yellow">yellow</span>. You might use exclamation points to identify surprising evidence and question marks to indicate skepticism toward an author's claim. Again, what matters is developing a system that works for you.</p>
+        <p><span class="ann-mark--underline">Color-code your markings</span>: for instance, you may highlight new vocabulary in <span class="mark-blue">blue</span> and key words in <span class="mark-yellow">yellow</span>. You might use exclamation points to identify surprising evidence and question marks to indicate skepticism toward an author's claim. Again, <span class="ann-mark--flag" data-glyph="★">what matters is developing a system that works for you</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--advice" aria-hidden="true">
@@ -1416,7 +1436,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Wherever possible, interrupt a text with your own voice. Place your thoughts and observations directly on the page. If you can't write on the page, use a notebook, loose-leaf paper, or sticky notes.</p>
+        <p>Wherever possible, <span class="ann-mark--flag" data-glyph="!">interrupt a text with your own voice</span>. Place your thoughts and observations directly on the page. If you can't write on the page, use a notebook, loose-leaf paper, or sticky notes.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1441,7 +1461,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Notes can do more heavy lifting than other markup tools. Your notes can: <span class="mark-blue">paraphrase</span> key info, reinforce important insights, ask and answer questions, <span class="ann-mark--underline">connect what you're reading to prior knowledge</span>, predict or extend an author's argument, make personal connections to the text, and summarize dense materials. Always include a summary at the end of important paragraphs, sections, or pages.</p>
+        <p>Notes can do more heavy lifting than other markup tools. Your notes can: <span class="mark-blue">paraphrase</span> key info, reinforce important insights, ask and answer questions, <span class="ann-mark--underline">connect what you're reading to prior knowledge</span>, <span class="ann-mark--flag" data-glyph="?">predict or extend an author's argument</span>, make personal connections to the text, and summarize dense materials. Always include a summary at the end of important paragraphs, sections, or pages.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--question" aria-hidden="true">
@@ -1453,7 +1473,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>Take a <span class="ann-mark--highlight">goldilocks approach</span> to notes while annotating: go beyond a few words or phrases, but avoid longwinded responses. The sweet spot is somewhere between a sentence fragment and a few sentences.</p>
+        <p>Take a <span class="ann-mark--highlight">goldilocks approach</span> to notes while annotating: go beyond a few words or phrases, but <span class="ann-mark--flag" data-glyph="!">avoid longwinded responses</span>. The sweet spot is somewhere between a sentence fragment and a few sentences.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
@@ -1465,7 +1485,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <p>What should an annotation contain? It's glib, but an honest answer is whatever information you think you might want later.</p>
+        <p>What should an annotation contain? It's glib, but an honest answer is <span class="ann-mark--flag" data-glyph="?">whatever information you think you might want later</span>.</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--question" aria-hidden="true">
@@ -1495,7 +1515,7 @@
 
     <div class="reading-row">
       <div class="text-col coda">
-        <p>Get out there and give it a whirl! It might take some trial and error to create a system that works for you, but <span class="mark-blue">marginalia</span> can't help but respect your boundaries!</p>
+        <p>Get out there and <span class="ann-mark--flag" data-glyph="!">give it a whirl</span>! It might take some trial and error to create a system that works for you, but <span class="mark-blue">marginalia</span> can't help but respect your boundaries!</p>
       </div>
       <div class="ann-col">
         <aside class="annotation annotation--note" aria-hidden="true">
