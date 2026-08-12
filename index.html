@@ -109,8 +109,6 @@
        ========================================================================== */
     *, *::before, *::after { box-sizing: border-box; }
 
-    /* Root drives the entire type scale. Bumping the size control scales
-       every rem-based element together: prose, headings, annotations, legend. */
     html { font-size: 100%; }
     html.text-size-2 { font-size: 113%; }
     html.text-size-3 { font-size: 126%; }
@@ -157,8 +155,6 @@
     /* ==========================================================================
        4. SITE HEADER & NAVIGATION
        ========================================================================== */
-
-    /* Header is always dark — does not invert with page theme */
     .site-header {
       position: sticky;
       top: 0;
@@ -202,7 +198,6 @@
       outline: none;
     }
 
-    /* Gear floats right within the bar without pushing the centered nav */
     .site-header__actions {
       position: absolute;
       right: 2rem;
@@ -233,7 +228,6 @@
       height: 17px;
     }
 
-    /* Floating annotation toggle pill */
     .annotation-float {
       position: fixed;
       bottom: 2rem;
@@ -268,7 +262,6 @@
       background-color: var(--pill-bg-active);
       color: var(--pill-fg-active);
     }
-    /* 28x35 native viewBox — let height follow width to keep the quill's proportions */
     .annotation-float__icon {
       width: 15px;
       height: auto;
@@ -353,10 +346,6 @@
       margin: 0 auto;
       padding: 5rem 2rem 6rem;
     }
-    /* Annotations off: tighten the frame so the reading measure centers.
-       The text column's own max-width is unchanged, so line breaks are stable
-       across the toggle; only the outer frame narrows. Applies at desktop only,
-       where the empty sidebar would otherwise pull the composition left. */
     @media (min-width: 1040px) {
       main { max-width: 820px; transition: max-width 0.25s ease; }
       body.annotations-visible main { max-width: 1300px; }
@@ -451,16 +440,7 @@
       }
     }
 
-    /* Focus dimming: only rows that actually carry an annotation dim at rest,
-       and only gently. Rows with an empty annotation column never dim, so
-       scrolling past unannotated prose stays full-contrast. No transform, to
-       avoid subpixel blur on the text. */
     @media (min-width: 1040px) {
-      /* Dim the paragraph text of annotated rows only. The bracket border
-         lives on .text-col (the container), so it stays crisp; the coda is
-         exempt so the send-off never recedes; the sidebar annotation is a
-         separate column and is unaffected. The result: the techniques being
-         demonstrated are never the faintest thing on the page. */
       body.annotations-visible .reading-row:has(.ann-col:not(:empty)) .text-col:not(.coda) > p {
         opacity: 0.82;
         transition: opacity 0.2s ease;
@@ -489,15 +469,10 @@
 
     /* ==========================================================================
        8. ANNOTATION COLUMN
-          Mobile (<1040px): hidden; when annotations-visible, non-empty columns
-          render as inline left-bordered callout blocks beneath their paragraph.
-          Desktop (≥1040px): sidebar panel, revealed by toggle.
        ========================================================================== */
 
-    /* --- Mobile default: hidden --- */
     .ann-col { display: none; }
 
-    /* --- Mobile: inline callout when toggle is on --- */
     @media (max-width: 1039px) {
       body.annotations-visible .ann-col:not(:empty) {
         display: block;
@@ -525,9 +500,6 @@
         border-left: 3px solid var(--color-advice);
         color: var(--color-advice);
       }
-      /* Ornamental SVGs don't translate inline; suppress them on mobile,
-         with one exception: the closing sloth is the send-off and is let
-         through, centered, beneath its annotation. */
       body.annotations-visible .ann-col .margin-ornament,
       body.annotations-visible .ann-col .ann-doodle:not(.ann-doodle--sloth-end) {
         display: none;
@@ -539,7 +511,6 @@
       }
     }
 
-    /* --- Desktop: sidebar panel --- */
     @media (min-width: 1040px) {
       .ann-col {
         display: block;
@@ -585,10 +556,13 @@
     .ann-text--thesis { font-weight: 700; }
 
     .ann-doodle            { display: block; height: auto; margin-bottom: 0.75rem; }
-    .ann-doodle--sloth     { width: 112px; }
-    .ann-doodle--scale     { width: 92px; }
-    .ann-doodle--pointer   { width: 84px; transform: scaleX(-1); }
-    .ann-doodle--sloth-end { width: 140px; margin-top: 1rem; }
+    .ann-doodle--sloth     { width: 133px; }
+    .ann-doodle--scale     { width: 83px; }
+    .ann-doodle--pointer   { width: 119px; transform: scaleX(-1); }
+    .ann-doodle--cat       { width: 86px; }
+    .ann-doodle--owl       { width: 86px; }
+    .ann-doodle--candle    { width: 57px; }
+    .ann-doodle--sloth-end { width: 166px; margin-top: 1rem; }
 
     .margin-ornament { display: block; }
     .ornament-asset  { display: block; width: 100px; height: auto; transform: scaleX(-1); }
@@ -612,19 +586,12 @@
       padding-left: 1.25rem;
     }
 
-    /* Box mark: fences off a single term, shown as a worked example in
-       the "Toolbox" section. Outline keeps it from nudging the text. */
     body.annotations-visible .ann-mark--box {
       outline: 1.5px solid var(--color-slate);
       outline-offset: 2px;
       border-radius: 2px;
     }
 
-    /* Circle mark: a hand-drawn loop around a doubtful figure, the skeptic's
-       gesture. Drawn as an inline SVG background so it reads as a reader's
-       pen-stroke rather than a UI element. Paired with the "where's the
-       citation?" margin note, the page enacts the source-skepticism it
-       teaches. Color tracks --color-rust (the challenge/doubt accent). */
     body.annotations-visible .ann-mark--circle {
       position: relative;
       display: inline;
@@ -646,7 +613,7 @@
        ========================================================================== */
     @media (max-width: 879px) {
       .site-header__bar {
-        padding: 0.75rem 3rem; /* right padding keeps gear clear of nav */
+        padding: 0.75rem 3rem;
       }
       .site-header__nav {
         overflow-x: auto;
@@ -684,9 +651,6 @@
 
     /* ==========================================================================
        13. PRINT
-          A handbook about marking up print should print well. Drop the chrome,
-          render annotations inline beneath their paragraph as black line notes,
-          and let the ornaments sit as plain black line art on white.
        ========================================================================== */
     @media print {
       .site-header,
@@ -702,11 +666,9 @@
 
       main { padding: 0; max-width: none; }
 
-      /* Linearize the grid: text then its annotation, stacked */
       .reading-row { display: block !important; opacity: 1 !important; }
       .text-col { max-width: none; padding: 0; }
 
-      /* Force annotations visible in print regardless of toggle state */
       .ann-col:not(:empty) {
         display: block !important;
         opacity: 1 !important;
@@ -722,17 +684,13 @@
       .annotation--question,
       .annotation--advice { color: #000 !important; }
 
-      /* Ornaments print as black line art */
       svg { --ornament-ink: #000 !important; --ornament-fill: #fff !important; --ornament-accent: #000 !important; }
 
-      /* Show inline markup as plain underlines/keylines, no fill colors */
       .mark-yellow, .mark-blue, .mark-red,
       .ann-mark--highlight { background: none !important; box-shadow: none !important; }
       .ann-mark--highlight,
       .ann-mark--underline { box-shadow: inset 0 -1.5pt 0 0 #000 !important; }
       .ann-bracket-para { border-left: 2pt solid #000 !important; }
-      /* Background images drop in print; redraw the circle as a real outline
-         so the citation specimen survives onto paper. */
       .ann-mark--circle {
         background-image: none !important;
         border: 1.5pt solid #000 !important;
@@ -748,20 +706,11 @@
       a { color: #000 !important; text-decoration: underline; }
       .reading-row { break-inside: avoid; }
 
-      /* --------------------------------------------------------------
-         WORKSHEET MODE (body.worksheet-mode, set by "Print blank copy").
-         A clean copy for students to annotate before the reveal: text
-         and headings only, double-spaced, with a wide blank right margin
-         for marginalia and a name/date block at the top. Overrides the
-         reveal-print rules above. Triggered only via the button, so a
-         plain Ctrl+P still prints the annotated reveal version.
-         -------------------------------------------------------------- */
       body.worksheet-mode .ann-col { display: none !important; }
       body.worksheet-mode .ann-legend { display: none !important; }
       body.worksheet-mode .divider-asset { display: none !important; }
       body.worksheet-mode .divider { padding: 1.2rem 0 !important; }
 
-      /* Strip every mark so students start from a blank text */
       body.worksheet-mode .mark-yellow,
       body.worksheet-mode .mark-blue,
       body.worksheet-mode .mark-red,
@@ -782,7 +731,6 @@
         padding-left: 0 !important;
       }
 
-      /* Wide blank right margin + roughly double spacing for annotation */
       body.worksheet-mode .text-col { max-width: 62% !important; }
       body.worksheet-mode .text-col p {
         line-height: 2.1 !important;
@@ -790,11 +738,9 @@
       }
       body.worksheet-mode .lede { font-size: 13pt !important; }
 
-      /* Name / Date / Class block, shown only when printing a worksheet */
       body.worksheet-mode .worksheet-header { display: flex !important; }
     }
 
-    /* The worksheet header is hidden everywhere except worksheet-mode print */
     .worksheet-header { display: none; }
     .worksheet-header {
       justify-content: space-between;
@@ -808,7 +754,6 @@
     }
     .worksheet-header span { white-space: nowrap; }
 
-    /* "Print blank copy" action in the settings panel */
     .settings-action {
       background: transparent;
       border: 1px solid rgba(253,253,251,0.35);
@@ -995,14 +940,10 @@
       <div class="ann-col">
         <aside class="annotation annotation--question" aria-hidden="true">
           <svg class="ann-doodle ann-doodle--sloth" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 390" role="img" aria-label="A bored medieval marginalia sloth hanging from a branch">
-
-  <!-- Underdrawing -->
   <ellipse cx="340" cy="168" rx="47" ry="47" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
   <ellipse cx="340" cy="234" rx="67" ry="76" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
   <path d="M280 79 C273 110 266 136 288 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
   <path d="M400 79 C407 110 414 136 392 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
-
-  <!-- Branch -->
   <path d="M152 79 C192 72 232 76 267 73 C296 71 321 75 340 73 C360 71 392 74 432 73 C469 72 499 75 529 74" stroke="var(--ornament-ink)" stroke-width="6" fill="none" stroke-linecap="round"/>
   <path d="M156 83 C196 76 236 80 269 77 C298 75 323 79 340 77 C360 75 393 78 433 77" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.32" stroke-linecap="round"/>
   <path d="M236 75 C238 65 246 66 244 76" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
@@ -1013,93 +954,65 @@
   <path d="M459 74 C461 68 466 69 464 75" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
   <path d="M199 77 C200 72 204 73 202 78" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.55" stroke-linecap="round"/>
   <path d="M490 75 C491 70 495 71 493 76" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.5" stroke-linecap="round"/>
-
-  <!-- Left arm -->
   <path d="M278 79 L275 91 C271 108 268 125 267 137 C267 147 276 155 290 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M282 80 L279 93 C275 110 273 127 272 139 C272 149 280 157 294 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
   <path d="M263 75 C256 57 263 50 270 62" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M262 76 C259 61 264 53 269 63" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.35" stroke-linecap="round"/>
   <path d="M273 72 C266 53 276 48 280 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M283 72 C277 53 288 50 290 63" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
-
-  <!-- Right arm -->
   <path d="M402 79 L405 91 C409 108 412 125 413 137 C413 147 404 155 390 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M398 80 L401 93 C405 110 407 127 408 139 C408 149 400 157 386 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
   <path d="M397 72 C390 53 400 48 404 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M407 72 C401 53 412 49 414 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M416 75 C411 56 422 52 423 65" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
-
-  <!-- Body -->
   <path d="M277 219 C274 234 274 251 278 265 C283 284 298 303 318 311 C328 315 334 308 340 308 C346 308 352 315 362 311 C382 303 397 284 402 265 C406 251 406 234 403 219 C398 199 382 183 362 177 C352 173 346 180 340 179 C334 180 328 173 318 177 C298 183 282 199 277 219 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M280 221 C277 236 277 253 281 267 C286 286 301 304 321 312" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28" stroke-linecap="round"/>
-  <!-- Body hatching left -->
   <path d="M285 211 C282 219 281 229 283 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M292 203 C288 214 287 226 289 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M301 197 C297 209 296 223 298 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M289 215 C286 223 285 231 288 238" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3"/>
-  <!-- Body hatching right -->
   <path d="M395 211 C398 219 399 229 397 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M388 203 C392 214 393 226 391 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M379 197 C383 209 384 223 382 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
-  <!-- Body fur -->
   <path d="M309 291 C306 299 307 308 311 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M326 296 C323 305 324 313 328 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M340 298 C340 307 340 315 340 320" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M355 296 C358 305 357 313 353 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M371 291 C374 299 373 308 369 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
-
-  <!-- Head -->
   <path d="M298 166 C296 153 300 141 308 133 C318 123 330 118 340 118 C350 118 362 123 372 133 C380 141 384 153 382 166 C383 179 379 193 370 201 C360 210 350 214 340 214 C330 214 320 210 310 201 C301 193 297 179 298 166 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M301 169 C299 156 303 144 311 136 C321 126 332 121 340 121" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.22" stroke-linecap="round"/>
   <path d="M374 151 C378 158 379 166 376 173" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
   <path d="M377 159 C381 166 381 174 378 180" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
   <path d="M303 153 C299 160 299 168 302 173" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.32"/>
-
-  <!-- Eye patches -->
   <path d="M306 163 C308 154 315 150 323 151 C330 152 337 157 336 164 C335 171 328 175 320 174 C313 173 306 171 306 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
   <path d="M344 163 C346 154 353 150 360 151 C367 152 375 157 374 164 C373 171 366 175 358 174 C351 173 344 171 344 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
-
-  <!-- Left eye -->
   <ellipse cx="321" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
   <circle cx="321" cy="165" r="2.9" fill="var(--ornament-ink)"/>
   <circle cx="319" cy="163" r="0.9" fill="white"/>
   <path d="M314 162 Q321 154 328 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
   <path d="M314 168 Q321 171 328 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
-
-  <!-- Right eye -->
   <ellipse cx="358" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
   <circle cx="358" cy="165" r="2.9" fill="var(--ornament-ink)"/>
   <circle cx="356" cy="163" r="0.9" fill="white"/>
   <path d="M351 162 Q358 154 365 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
   <path d="M351 168 Q358 171 365 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
-
-  <!-- Nose -->
   <path d="M335 180 C336 176 339 174 341 174 C344 174 347 176 345 180 C344 184 340 185 338 184 C336 183 334 182 335 180 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.6"/>
-
-  <!-- Mouth -->
   <path d="M328 193 C332 191 337 190 340 190 C343 190 348 191 352 193" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
   <path d="M328 193 C325 197 325 201 327 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
   <path d="M352 193 C355 197 355 201 353 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-
-  <!-- Left leg -->
   <path d="M308 303 L305 315 C301 328 297 337 294 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M294 345 C283 340 280 348 287 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M294 345 C287 354 289 362 295 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M294 345 C297 354 302 359 308 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-
-  <!-- Right leg -->
   <path d="M372 303 L375 315 C379 328 383 337 386 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M386 345 C397 340 400 348 393 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M386 345 C393 354 391 362 385 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M386 345 C383 354 378 359 372 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-
-  <!-- Stray marks -->
   <path d="M296 176 C293 173 291 176 293 178" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.32" stroke-linecap="round"/>
   <path d="M383 233 C387 230 387 235 384 235" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.28" stroke-linecap="round"/>
   <path d="M312 258 C310 253 314 250 316 253 C318 256 315 259 312 258" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28"/>
   <path d="M366 248 C369 245 370 250 367 250" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.25" stroke-linecap="round"/>
   <path d="M323 290 C321 287 319 290 321 291" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3" stroke-linecap="round"/>
-
 </svg>
           <p class="ann-text">If you "read" by moving your eyes across a page until they hit punctuation, you're the equivalent of a conversational partner who's only listening to know when they can start talking.</p>
         </aside>
@@ -1156,30 +1069,19 @@
       <div class="ann-col">
         <aside class="margin-ornament" aria-hidden="true">
           <svg class="ornament-asset" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 96" role="img" aria-label="A manicule: a pointing hand with a cuffed sleeve indicating important text">
-  <!-- Cuff -->
   <path d="M16 26 C11 27 9 31 10 36 L10 60 C9 65 11 69 16 70 L37 70 L37 26 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M17 27 C13 31 13 65 17 69" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>
   <path d="M31 28 L31 68" stroke="var(--ornament-ink)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.7"/>
   <path d="M34 30 L34 66" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.45"/>
-
-  <!-- Fist -->
   <path d="M37 34 C41 30 49 29 57 30 C68 31 78 32 82 39 C84 43 84 47 84 51 L84 60 C84 69 74 72 62 72 C50 72 40 70 37 62 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Folded fingers, tucked along the right face -->
   <path d="M82 47 C90 46 94 50 92 54 C91 57 86 58 82 57" stroke="var(--ornament-ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M82 56 C90 55 94 59 92 63 C91 66 86 67 82 66" stroke="var(--ornament-ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M82 65 C89 64 93 67 91 70 C90 72 86 72 82 71" stroke="var(--ornament-ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Index finger, extended and pointing right -->
   <path d="M73 35 C95 31 117 30 136 31 C143 31 146 34 146 38 C146 42 143 45 136 45 C117 46 95 45 75 44 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M136 32 C141 33 142 43 136 44" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.5"/>
   <path d="M76 36 C79 39 79 41 76 44" stroke="var(--ornament-ink)" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.35"/>
-
-  <!-- Thumb, curled over the top of the fist -->
   <path d="M52 33 C51 25 61 22 67 27 C71 31 69 37 65 38" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M56 30 C58 28 61 28 63 30" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.4"/>
-
-  <!-- Creases -->
   <path d="M44 46 C50 45 56 45 61 47" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.3"/>
   <path d="M45 64 C50 65 56 65 61 64" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.28"/>
 </svg>
@@ -1254,7 +1156,7 @@
   <path d="M40 62 C43 60 46 60 50 62" stroke="var(--ornament-ink)" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3"/>
   <path d="M38 65 C43 63 47 63 52 65" stroke="var(--ornament-ink)" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.25"/>
 </svg>
-          <span class="ann-symbol">$</span>
+          <span class="ann-symbol">!</span>
           <p class="ann-text">Compound interest: key to accruing both wealth and knowledge.</p>
         </aside>
       </div>
@@ -1305,30 +1207,19 @@
       <div class="ann-col">
         <aside class="annotation annotation--advice" aria-hidden="true">
           <svg class="ann-doodle ann-doodle--pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 96" role="img" aria-label="A manicule: a pointing hand with a cuffed sleeve indicating important text">
-  <!-- Cuff -->
   <path d="M16 26 C11 27 9 31 10 36 L10 60 C9 65 11 69 16 70 L37 70 L37 26 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M17 27 C13 31 13 65 17 69" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>
   <path d="M31 28 L31 68" stroke="var(--ornament-ink)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.7"/>
   <path d="M34 30 L34 66" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.45"/>
-
-  <!-- Fist -->
   <path d="M37 34 C41 30 49 29 57 30 C68 31 78 32 82 39 C84 43 84 47 84 51 L84 60 C84 69 74 72 62 72 C50 72 40 70 37 62 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Folded fingers, tucked along the right face -->
   <path d="M82 47 C90 46 94 50 92 54 C91 57 86 58 82 57" stroke="var(--ornament-ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M82 56 C90 55 94 59 92 63 C91 66 86 67 82 66" stroke="var(--ornament-ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M82 65 C89 64 93 67 91 70 C90 72 86 72 82 71" stroke="var(--ornament-ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Index finger, extended and pointing right -->
   <path d="M73 35 C95 31 117 30 136 31 C143 31 146 34 146 38 C146 42 143 45 136 45 C117 46 95 45 75 44 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M136 32 C141 33 142 43 136 44" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.5"/>
   <path d="M76 36 C79 39 79 41 76 44" stroke="var(--ornament-ink)" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.35"/>
-
-  <!-- Thumb, curled over the top of the fist -->
   <path d="M52 33 C51 25 61 22 67 27 C71 31 69 37 65 38" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M56 30 C58 28 61 28 63 30" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.4"/>
-
-  <!-- Creases -->
   <path d="M44 46 C50 45 56 45 61 47" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.3"/>
   <path d="M45 64 C50 65 56 65 61 64" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.28"/>
 </svg>
@@ -1610,14 +1501,10 @@
         <aside class="annotation annotation--note" aria-hidden="true">
           <p class="ann-text">I mean it! Your first attempt will be imperfect and slightly embarrassing, and that's completely fine. Make a habit of annotating and it will eventually solidify into a system.</p>
           <svg class="ann-doodle ann-doodle--sloth-end" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 390" role="img" aria-label="A bored medieval marginalia sloth hanging from a branch">
-
-  <!-- Underdrawing -->
   <ellipse cx="340" cy="168" rx="47" ry="47" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
   <ellipse cx="340" cy="234" rx="67" ry="76" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.13"/>
   <path d="M280 79 C273 110 266 136 288 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
   <path d="M400 79 C407 110 414 136 392 159" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.18" stroke-linecap="round"/>
-
-  <!-- Branch -->
   <path d="M152 79 C192 72 232 76 267 73 C296 71 321 75 340 73 C360 71 392 74 432 73 C469 72 499 75 529 74" stroke="var(--ornament-ink)" stroke-width="6" fill="none" stroke-linecap="round"/>
   <path d="M156 83 C196 76 236 80 269 77 C298 75 323 79 340 77 C360 75 393 78 433 77" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.32" stroke-linecap="round"/>
   <path d="M236 75 C238 65 246 66 244 76" stroke="var(--ornament-ink)" stroke-width="2.1" fill="none" stroke-linecap="round"/>
@@ -1628,93 +1515,65 @@
   <path d="M459 74 C461 68 466 69 464 75" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
   <path d="M199 77 C200 72 204 73 202 78" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.55" stroke-linecap="round"/>
   <path d="M490 75 C491 70 495 71 493 76" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.5" stroke-linecap="round"/>
-
-  <!-- Left arm -->
   <path d="M278 79 L275 91 C271 108 268 125 267 137 C267 147 276 155 290 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M282 80 L279 93 C275 110 273 127 272 139 C272 149 280 157 294 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
   <path d="M263 75 C256 57 263 50 270 62" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M262 76 C259 61 264 53 269 63" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.35" stroke-linecap="round"/>
   <path d="M273 72 C266 53 276 48 280 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M283 72 C277 53 288 50 290 63" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
-
-  <!-- Right arm -->
   <path d="M402 79 L405 91 C409 108 412 125 413 137 C413 147 404 155 390 159" stroke="var(--ornament-ink)" stroke-width="5.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M398 80 L401 93 C405 110 407 127 408 139 C408 149 400 157 386 160" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>
   <path d="M397 72 C390 53 400 48 404 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M407 72 C401 53 412 49 414 61" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
   <path d="M416 75 C411 56 422 52 423 65" stroke="var(--ornament-ink)" stroke-width="2.9" fill="none" stroke-linecap="round"/>
-
-  <!-- Body -->
   <path d="M277 219 C274 234 274 251 278 265 C283 284 298 303 318 311 C328 315 334 308 340 308 C346 308 352 315 362 311 C382 303 397 284 402 265 C406 251 406 234 403 219 C398 199 382 183 362 177 C352 173 346 180 340 179 C334 180 328 173 318 177 C298 183 282 199 277 219 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M280 221 C277 236 277 253 281 267 C286 286 301 304 321 312" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28" stroke-linecap="round"/>
-  <!-- Body hatching left -->
   <path d="M285 211 C282 219 281 229 283 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M292 203 C288 214 287 226 289 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M301 197 C297 209 296 223 298 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M289 215 C286 223 285 231 288 238" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3"/>
-  <!-- Body hatching right -->
   <path d="M395 211 C398 219 399 229 397 237" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M388 203 C392 214 393 226 391 236" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
   <path d="M379 197 C383 209 384 223 382 234" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" opacity="0.48"/>
-  <!-- Body fur -->
   <path d="M309 291 C306 299 307 308 311 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M326 296 C323 305 324 313 328 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M340 298 C340 307 340 315 340 320" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M355 296 C358 305 357 313 353 317" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
   <path d="M371 291 C374 299 373 308 369 313" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" opacity="0.55"/>
-
-  <!-- Head -->
   <path d="M298 166 C296 153 300 141 308 133 C318 123 330 118 340 118 C350 118 362 123 372 133 C380 141 384 153 382 166 C383 179 379 193 370 201 C360 210 350 214 340 214 C330 214 320 210 310 201 C301 193 297 179 298 166 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M301 169 C299 156 303 144 311 136 C321 126 332 121 340 121" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.22" stroke-linecap="round"/>
   <path d="M374 151 C378 158 379 166 376 173" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
   <path d="M377 159 C381 166 381 174 378 180" stroke="var(--ornament-ink)" stroke-width="1.1" fill="none" opacity="0.42"/>
   <path d="M303 153 C299 160 299 168 302 173" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.32"/>
-
-  <!-- Eye patches -->
   <path d="M306 163 C308 154 315 150 323 151 C330 152 337 157 336 164 C335 171 328 175 320 174 C313 173 306 171 306 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
   <path d="M344 163 C346 154 353 150 360 151 C367 152 375 157 374 164 C373 171 366 175 358 174 C351 173 344 171 344 163 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
-
-  <!-- Left eye -->
   <ellipse cx="321" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
   <circle cx="321" cy="165" r="2.9" fill="var(--ornament-ink)"/>
   <circle cx="319" cy="163" r="0.9" fill="white"/>
   <path d="M314 162 Q321 154 328 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
   <path d="M314 168 Q321 171 328 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
-
-  <!-- Right eye -->
   <ellipse cx="358" cy="164" rx="6.2" ry="4.6" fill="white" stroke="var(--ornament-ink)" stroke-width="1.3"/>
   <circle cx="358" cy="165" r="2.9" fill="var(--ornament-ink)"/>
   <circle cx="356" cy="163" r="0.9" fill="white"/>
   <path d="M351 162 Q358 154 365 162" stroke="var(--ornament-ink)" stroke-width="3.2" fill="var(--ornament-accent)" stroke-linecap="round"/>
   <path d="M351 168 Q358 171 365 168" stroke="var(--ornament-ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.55"/>
-
-  <!-- Nose -->
   <path d="M335 180 C336 176 339 174 341 174 C344 174 347 176 345 180 C344 184 340 185 338 184 C336 183 334 182 335 180 Z" fill="var(--ornament-accent)" stroke="var(--ornament-ink)" stroke-width="1.6"/>
-
-  <!-- Mouth -->
   <path d="M328 193 C332 191 337 190 340 190 C343 190 348 191 352 193" stroke="var(--ornament-ink)" stroke-width="2.3" fill="none" stroke-linecap="round"/>
   <path d="M328 193 C325 197 325 201 327 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
   <path d="M352 193 C355 197 355 201 353 203" stroke="var(--ornament-ink)" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-
-  <!-- Left leg -->
   <path d="M308 303 L305 315 C301 328 297 337 294 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M294 345 C283 340 280 348 287 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M294 345 C287 354 289 362 295 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M294 345 C297 354 302 359 308 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-
-  <!-- Right leg -->
   <path d="M372 303 L375 315 C379 328 383 337 386 345" stroke="var(--ornament-ink)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M386 345 C397 340 400 348 393 353" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M386 345 C393 354 391 362 385 363" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   <path d="M386 345 C383 354 378 359 372 358" stroke="var(--ornament-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-
-  <!-- Stray marks -->
   <path d="M296 176 C293 173 291 176 293 178" stroke="var(--ornament-ink)" stroke-width="1" fill="none" opacity="0.32" stroke-linecap="round"/>
   <path d="M383 233 C387 230 387 235 384 235" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.28" stroke-linecap="round"/>
   <path d="M312 258 C310 253 314 250 316 253 C318 256 315 259 312 258" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" opacity="0.28"/>
   <path d="M366 248 C369 245 370 250 367 250" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.25" stroke-linecap="round"/>
   <path d="M323 290 C321 287 319 290 321 291" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.3" stroke-linecap="round"/>
-
 </svg>
         </aside>
       </div>
@@ -1736,6 +1595,19 @@
     var settingsBtn   = document.getElementById('settings-btn');
     var settingsPanel = document.getElementById('settings-panel');
     var annotations   = document.querySelectorAll('aside.annotation, aside.margin-ornament');
+
+    /* ------------------------------------------------------------------
+       Storage helpers — wrapped so a browser that blocks localStorage
+       (private browsing, locked-down school devices) degrades to
+       in-memory defaults instead of throwing and halting the whole
+       init script.
+    ------------------------------------------------------------------ */
+    function safeGetItem(key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeSetItem(key, value) {
+      try { localStorage.setItem(key, value); } catch (e) { /* ignore */ }
+    }
 
     /* ------------------------------------------------------------------
        Settings Panel
@@ -1761,8 +1633,6 @@
 
     /* ------------------------------------------------------------------
        Worksheet (blank copy) print
-       Adds body.worksheet-mode, prints, then removes it on afterprint so
-       the screen and a normal Ctrl+P (the annotated reveal) are unchanged.
     ------------------------------------------------------------------ */
     var printBlankBtn = document.getElementById('print-blank');
     function printWorksheet() {
@@ -1778,8 +1648,6 @@
     window.addEventListener('afterprint', function () {
       body.classList.remove('worksheet-mode');
     });
-    /* ?blank in the URL arms the worksheet copy directly (e.g. a bookmarked
-       handout link). Harmless on screen, since worksheet rules are print-only. */
     if (window.location.search.indexOf('blank') !== -1) {
       window.addEventListener('load', printWorksheet);
     }
@@ -1791,7 +1659,7 @@
       body.classList.toggle('annotations-visible', visible);
       if (toggleBtn)    toggleBtn.setAttribute('aria-pressed', String(visible));
       if (toggleLabel)  toggleLabel.textContent = visible ? 'Hide Annotations' : 'Show Annotations';
-      localStorage.setItem('ann_annotations', visible ? '1' : '0');
+      safeSetItem('ann_annotations', visible ? '1' : '0');
       annotations.forEach(function (el) {
         el.setAttribute('aria-hidden', String(!visible));
       });
@@ -1828,7 +1696,7 @@
       sizeBtns.forEach(function (btn) {
         btn.setAttribute('aria-pressed', String(parseInt(btn.dataset.size, 10) === n));
       });
-      localStorage.setItem('ann_size', n);
+      safeSetItem('ann_size', n);
     }
     sizeBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -1846,7 +1714,7 @@
       fontBtns.forEach(function (btn) {
         btn.setAttribute('aria-pressed', String(btn.dataset.font === name));
       });
-      localStorage.setItem('ann_font', name);
+      safeSetItem('ann_font', name);
     }
     fontBtns.forEach(function (btn) {
       btn.addEventListener('click', function () { setFont(btn.dataset.font); });
@@ -1862,24 +1730,33 @@
       themeBtns.forEach(function (btn) {
         btn.setAttribute('aria-pressed', String(btn.dataset.theme === name));
       });
-      localStorage.setItem('ann_theme', name);
+      safeSetItem('ann_theme', name);
     }
     themeBtns.forEach(function (btn) {
       btn.addEventListener('click', function () { setTheme(btn.dataset.theme); });
     });
 
     /* ------------------------------------------------------------------
-       Restore Preferences
+       Restore Preferences — wrapped in try/catch so a storage failure
+       falls back to sane defaults instead of aborting the whole
+       initialization (which would leave every control non-functional).
     ------------------------------------------------------------------ */
     (function restorePrefs() {
-      var savedAnn   = localStorage.getItem('ann_annotations');
-      var savedSize  = localStorage.getItem('ann_size');
-      var savedFont  = localStorage.getItem('ann_font');
-      var savedTheme = localStorage.getItem('ann_theme');
-      setAnnotations(savedAnn === '1');
-      setSize(savedSize ? parseInt(savedSize, 10) : 1);
-      setFont(savedFont  || 'serif');
-      setTheme(savedTheme || 'light');
+      try {
+        var savedAnn   = safeGetItem('ann_annotations');
+        var savedSize  = safeGetItem('ann_size');
+        var savedFont  = safeGetItem('ann_font');
+        var savedTheme = safeGetItem('ann_theme');
+        setAnnotations(savedAnn === '1');
+        setSize(savedSize ? parseInt(savedSize, 10) : 1);
+        setFont(savedFont  || 'serif');
+        setTheme(savedTheme || 'light');
+      } catch (e) {
+        setAnnotations(false);
+        setSize(1);
+        setFont('serif');
+        setTheme('light');
+      }
     })();
 
     /* ------------------------------------------------------------------
