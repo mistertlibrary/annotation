@@ -1,0 +1,44 @@
+{
+  "lyceum": 1,
+  "_note": "Generated for the Lyceum hub's unified search. Section titles are the guide's own headings. 'keywords' is optional and never displayed: it lets an evocative title stay evocative while remaining findable. Leave arrays empty until you have something to add.",
+  "title": "On Annotation: A Handbook for Active Readers",
+  "description": "",
+  "url": "https://mistertlibrary.github.io/annotation/",
+  "series": "",
+  "course": "",
+  "subjects": [
+    "English Language Arts"
+  ],
+  "sections": [
+    {
+      "title": "Why Read?",
+      "anchor": "#argument",
+      "keywords": []
+    },
+    {
+      "title": "Why Write?",
+      "anchor": "#why-bother",
+      "keywords": []
+    },
+    {
+      "title": "Before You Begin…",
+      "anchor": "#before-you-begin",
+      "keywords": []
+    },
+    {
+      "title": "Make Your Mark!",
+      "anchor": "#mark-it-up",
+      "keywords": []
+    },
+    {
+      "title": "Make Yourself Heard!",
+      "anchor": "#write-your-notes",
+      "keywords": []
+    },
+    {
+      "title": "Iterate and Explore!",
+      "anchor": "#get-out-there",
+      "keywords": []
+    }
+  ]
+}
