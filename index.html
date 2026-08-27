@@ -867,7 +867,7 @@
   <span id="toggle-label">Show Annotations</span>
 </button>
 
-<div class="settings-panel" id="settings-panel" role="region" aria-label="Display settings" aria-hidden="true">
+<div class="settings-panel" id="settings-panel" role="region" aria-label="Display settings" aria-hidden="true" inert>
   <div class="settings-panel__inner">
 
     <div class="ctrl-cluster" role="group" aria-label="Text size">
@@ -1640,6 +1640,11 @@
       settingsPanel.classList.toggle('is-open', open);
       settingsBtn.setAttribute('aria-expanded', String(open));
       settingsPanel.setAttribute('aria-hidden', String(!open));
+      /* aria-hidden alone hides the panel from a screen reader while leaving
+         its buttons in the tab order, so a keyboard user lands on controls
+         that announce nothing. inert removes them from both at once. */
+      if (open) settingsPanel.removeAttribute('inert');
+      else settingsPanel.setAttribute('inert', '');
     }
 
     settingsBtn.addEventListener('click', function (e) {
