@@ -1,919 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light" data-size="medium" data-font="sans">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>On Annotation: A Handbook for Active Readers</title>
-  <!-- Reader preferences, shared across the Lyceum network. See librarylyceum/PREFS-README.md -->
-  <script src="/librarylyceum/lyceum-prefs.js" data-guide="annotation"></script>
-  <style>
-  /* Self-hosted. These faces previously came from fonts.googleapis.com on every
-     page load — a third-party request from a school site, and a dependency that
-     can fail. Since Chrome 86 partitioned the HTTP cache by top-level site, the
-     old shared-cache argument for a font CDN no longer holds: a student downloaded
-     them fresh for this site regardless. Files live once at the hub and are shared
-     across the network; if the hub is unreachable the fallback stack renders and
-     the page stays usable. */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On Annotation | WEHS Library Lyceum</title>
+<meta name="description" content="An annotated handbook for active readers: why reading is a conversation, how to mark up a text, and how to write notes worth rereading. Show the margin notes as you read, or print a blank copy to practice.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WEHS Library Lyceum">
+<meta property="og:title" content="On Annotation">
+<meta property="og:description" content="An annotated handbook for active readers: why reading is a conversation, how to mark up a text, and how to write notes worth rereading. Show the margin notes as you read, or print a blank copy to practice.">
+<meta property="og:url" content="https://mistertlibrary.github.io/annotation/">
+<meta property="og:image" content="https://mistertlibrary.github.io/librarylyceum/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/librarylyceum/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/librarylyceum/favicon.png">
+<script>
+(function(){try{var d=document.documentElement,t=localStorage.getItem("lyceum-theme"),s=localStorage.getItem("lyceum-size"),f=localStorage.getItem("lyceum-font");if(t==="dark"||t==="contrast")d.dataset.theme=t;if(s==="small"||s==="large")d.dataset.size=s;if(f==="serif"||f==="sans"||f==="dyslexic")d.dataset.font=f;if(localStorage.getItem("ann_annotations")==="1")d.classList.add("ann-on")}catch(e){}})();
+</script>
+<style>
+@font-face{font-family:"Bebas Neue";font-weight:400;font-display:swap;src:url("fonts/bebas-neue-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Lexend";font-weight:400;font-display:swap;src:url("fonts/lexend-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Lexend";font-weight:600;font-display:swap;src:url("fonts/lexend-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Lexend";font-weight:700;font-display:swap;src:url("fonts/lexend-latin-700-normal.woff2") format("woff2")}
+@font-face{font-family:"Gochi Hand";font-weight:400;font-display:swap;src:url("fonts/gochi-hand-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Literata";font-weight:400;font-display:swap;src:url("fonts/literata-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Literata";font-weight:400;font-style:italic;font-display:swap;src:url("fonts/literata-latin-400-italic.woff2") format("woff2")}
+@font-face{font-family:"Literata";font-weight:800;font-display:swap;src:url("fonts/literata-latin-800-normal.woff2") format("woff2")}
+@font-face{font-family:"OpenDyslexic";font-weight:400;font-display:swap;src:url("/librarylyceum/fonts/opendyslexic-400.woff2") format("woff2")}
+@font-face{font-family:"OpenDyslexic";font-weight:700;font-display:swap;src:url("/librarylyceum/fonts/opendyslexic-700.woff2") format("woff2")}
+:root{--bg:#fffdf9;--card:#ffffff;--ink:#25222b;--muted:#4a4552;--pen:#2f5f62;--focus:#1f5e7a;--teal:#6FADB0;--peach:#EEA88F;--lilac:#BEA1C8;--mustard:#E8BF7A;--mint:#7DBBA4;--sky:#9DB8DE;--t-teal:#dcefef;--t-peach:#fbe2d8;--t-lilac:#ece2f1;--t-mustard:#f8e6c2;--t-mint:#dcefe6;--t-sky:#e0e9f6;--note:#2f5f62;--question:#9a3d1f;--advice:#7a5a12;--ornament-ink:#25222b;--ornament-fill:#f8e6c2;--ornament-accent:#EEA88F;--body:"Lexend",system-ui,sans-serif;--display:"Bebas Neue","Arial Narrow",sans-serif;--hand:"Gochi Hand","Segoe Print",cursive;--base:20px}
+[data-theme="dark"]{--bg:#1b1a20;--card:#25232b;--ink:#f1eef6;--muted:#cfc9d8;--pen:#a8dcdf;--focus:#8cc8e0;--t-teal:#21494b;--t-peach:#5a3529;--t-lilac:#43344b;--t-mustard:#56431d;--t-mint:#22473a;--t-sky:#2a3c57;--note:#a8dcdf;--question:#f4b9a3;--advice:#ecd08e;--ornament-ink:#f1eef6;--ornament-fill:#56431d;--ornament-accent:#EEA88F}
+[data-theme="contrast"]{--bg:#000;--card:#000;--ink:#fff;--muted:#fff;--pen:#ffd54a;--focus:#ffd54a;--teal:#fff;--peach:#fff;--lilac:#fff;--mustard:#fff;--mint:#fff;--sky:#fff;--t-teal:#000;--t-peach:#000;--t-lilac:#000;--t-mustard:#000;--t-mint:#000;--t-sky:#000;--note:#ffd54a;--question:#ffd54a;--advice:#ffd54a;--ornament-ink:#fff;--ornament-fill:#000;--ornament-accent:#ffd54a}
+[data-size="small"]{--base:18px}[data-size="large"]{--base:23px}
+[data-font="serif"]{--body:"Literata",Georgia,serif}
+[data-font="dyslexic"]{--body:"OpenDyslexic",sans-serif;--display:"OpenDyslexic",sans-serif;--hand:"OpenDyslexic",sans-serif}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:5rem}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.05rem;line-height:1.7;text-align:center;overflow-wrap:break-word}
+a{color:inherit;text-underline-offset:3px}
+a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.03em;line-height:1.05;text-align:center;margin:0;overflow-wrap:anywhere}
+[data-font="dyslexic"] h1,[data-font="dyslexic"] h2{letter-spacing:0;font-weight:700}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:-999px;top:0;background:var(--card);color:var(--ink);padding:.5rem 1rem;z-index:20}
+.skip:focus{left:1rem;top:1rem}
+.topbar{background:#2F1414;color:#f6f1e7;font-family:"Lexend",system-ui,sans-serif;font-size:.72rem;letter-spacing:.04em;padding:.55rem 1.2rem}
+.topbar a{color:#f6f1e7;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4)}
+[data-theme="contrast"] .topbar{background:#000;border-bottom:1px solid #fff}
+.hl{background:linear-gradient(104deg,transparent .6%,var(--c,var(--t-mustard)) 2%,var(--c,var(--t-mustard)) 97%,transparent 99%);padding:.02em .25em 0;border-radius:.3em .5em .4em .6em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+[data-theme="contrast"] .hl{background:none;text-decoration:underline;text-decoration-color:#ffd54a;text-decoration-thickness:.08em;text-underline-offset:.12em}
 
-  @font-face { font-family:"IM Fell English"; font-style:normal; font-weight:400; font-display:swap; src:url("/librarylyceum/fonts/im-fell-english-400.woff2") format("woff2"); }
-  @font-face { font-family:"IM Fell English"; font-style:italic; font-weight:400; font-display:swap; src:url("/librarylyceum/fonts/im-fell-english-400-italic.woff2") format("woff2"); }
-  @font-face { font-family:"Lora"; font-style:normal; font-weight:400; font-display:swap; src:url("/librarylyceum/fonts/lora-400.woff2") format("woff2"); }
-  @font-face { font-family:"Lora"; font-style:normal; font-weight:600; font-display:swap; src:url("/librarylyceum/fonts/lora-600.woff2") format("woff2"); }
-  @font-face { font-family:"Lora"; font-style:italic; font-weight:400; font-display:swap; src:url("/librarylyceum/fonts/lora-400-italic.woff2") format("woff2"); }
-  @font-face { font-family:"Lora"; font-style:italic; font-weight:600; font-display:swap; src:url("/librarylyceum/fonts/lora-600-italic.woff2") format("woff2"); }
-  @font-face { font-family:"Inter"; font-style:normal; font-weight:400; font-display:swap; src:url("/librarylyceum/fonts/inter-400.woff2") format("woff2"); }
-  @font-face { font-family:"Inter"; font-style:normal; font-weight:500; font-display:swap; src:url("/librarylyceum/fonts/inter-500.woff2") format("woff2"); }
-  @font-face { font-family:"Inter"; font-style:normal; font-weight:600; font-display:swap; src:url("/librarylyceum/fonts/inter-600.woff2") format("woff2"); }
-  @font-face { font-family:"Inter"; font-style:normal; font-weight:700; font-display:swap; src:url("/librarylyceum/fonts/inter-700.woff2") format("woff2"); }
-  @font-face { font-family:"JetBrains Mono"; font-style:normal; font-weight:400; font-display:swap; src:url("/librarylyceum/fonts/jetbrains-mono-400.woff2") format("woff2"); }
-  @font-face { font-family:"JetBrains Mono"; font-style:normal; font-weight:700; font-display:swap; src:url("/librarylyceum/fonts/jetbrains-mono-700.woff2") format("woff2"); }
-  @font-face { font-family:"JetBrains Mono"; font-style:italic; font-weight:400; font-display:swap; src:url("/librarylyceum/fonts/jetbrains-mono-400-italic.woff2") format("woff2"); }
+.hero{position:relative;padding:3.6rem 1.25rem 3rem;overflow:hidden;border-bottom:2.5px solid var(--ink)}
+.hero h1{font-size:clamp(3.6rem,14vw,7.5rem);line-height:.95}
+.hero h1 .hl{--c:var(--lilac);color:#25222b;padding:.06em .3em 0}
+[data-theme="contrast"] .hero h1 .hl{color:#fff}
+.hero .sub{font-weight:600;font-size:clamp(1.15rem,3.2vw,1.45rem);line-height:1.4;margin:1.2rem auto 0}
+.doodle{position:absolute;pointer-events:none}
+.doodle path{fill:none;stroke-width:8;stroke-linecap:round}
+.controls{display:flex;flex-wrap:wrap;gap:.9rem;justify-content:center;margin-top:1.8rem}
+.btn{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--body);font-weight:700;font-size:1rem;color:var(--ink);background:var(--card);border:2.5px solid var(--ink);border-radius:12px;padding:.55rem 1.1rem;cursor:pointer;box-shadow:4px 4px 0 var(--c,var(--mustard));line-height:1.3}
+.btn svg{width:1.2rem;height:1.2rem;flex:none}
+.btn[aria-pressed="true"]{background:var(--t-lilac)}
+[data-theme="contrast"] .btn[aria-pressed="true"]{background:#ffd54a;color:#000}
+
+.ann-legend{display:none;flex-wrap:wrap;gap:.6rem;justify-content:center;align-items:center;margin:1.6rem auto 0;font-weight:600}
+.ann-on .ann-legend{display:flex}
+.ann-legend__label{font-family:var(--display);font-size:1.4rem;letter-spacing:.05em;font-weight:400}
+.ann-legend__item{display:inline-flex;align-items:center;gap:.4rem;border:2px solid var(--ink);border-radius:999px;padding:.25rem .85rem}
+.ann-legend__item--note{background:var(--t-teal)}.ann-legend__item--question{background:var(--t-peach)}.ann-legend__item--advice{background:var(--t-mustard)}
+.ann-legend__dot{display:none}
+.ann-legend__glyph{font-family:var(--display);font-size:1.3rem;line-height:1}
+
+.nav{position:sticky;top:0;z-index:8;background:var(--card);border-bottom:2.5px solid var(--ink)}
+.nav ol{list-style:none;margin:0 auto;padding:.55rem 1rem;display:flex;flex-wrap:wrap;gap:.2rem 1.6rem;justify-content:center;max-width:66rem}
+.nav a{font-family:var(--display);font-size:1.3rem;letter-spacing:.06em;text-decoration:none;color:var(--ink)}
+.nav a:hover{text-decoration:underline;text-decoration-color:var(--peach);text-decoration-thickness:3px}
+
+main{display:block;max-width:44rem;margin:0 auto;padding:0 1.25rem 4rem}
+.ann-on main{max-width:44rem}
+.worksheet-header{display:none}
+.section{padding-top:3.4rem}
+.section-heading{font-size:clamp(2.6rem,8vw,3.6rem);margin:0 0 1.2rem}
+.reading-row{display:block}
+.text-col p{margin:0 0 1.3rem}
+.text-col p.lede{font-size:1.2rem}
+.coda{font-size:1.15rem}
+.coda p{font-family:var(--hand);color:var(--pen);font-size:1.45rem;line-height:1.4}
+.ann-col{display:none}
+.divider{display:flex;justify-content:center;padding:2.2rem 0 .4rem}
+.divider-asset{display:block;width:150px;height:auto}
+
+.ann-on .ann-col:not(:empty){display:block;margin:-.2rem auto 1.6rem;max-width:30rem}
+.ann-on .margin-ornament{display:none}
+.annotation{display:none}
+.ann-on .annotation{display:block;position:relative;background:var(--card);border:2.5px solid var(--ink);border-radius:14px 10px 16px 10px;padding:1.3rem 1.2rem 1rem;box-shadow:5px 5px 0 var(--c)}
+.annotation--note{--c:var(--teal);--t:var(--t-teal);--g:var(--note)}
+.annotation--question{--c:var(--peach);--t:var(--t-peach);--g:var(--question)}
+.annotation--advice{--c:var(--mustard);--t:var(--t-mustard);--g:var(--advice)}
+.ann-symbol{position:absolute;top:-1rem;left:50%;transform:translateX(-50%);display:grid;place-items:center;width:2rem;height:2rem;border:2.5px solid var(--ink);border-radius:50%;background:var(--t);font-family:var(--display);font-size:1.35rem;line-height:1;color:var(--ink)}
+.ann-text{font-family:var(--hand);font-size:1.38rem;line-height:1.35;color:var(--ink);margin:0}
+.ann-text--thesis{font-weight:700}
+[data-font="dyslexic"] .ann-text{font-size:1rem}
+.ann-doodle{display:block;height:auto;margin:0 auto .6rem}
+.ann-doodle--sloth{width:133px}.ann-doodle--scale{width:83px}.ann-doodle--pointer{width:119px;transform:scaleX(-1)}.ann-doodle--cat{width:86px}.ann-doodle--owl{width:86px}.ann-doodle--candle{width:57px}.ann-doodle--sloth-end{width:166px}
+
+.ann-on .mark-yellow,.ann-on .ann-mark--highlight{background:var(--t-mustard);border-radius:.25em;padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.ann-on .mark-blue{background:var(--t-sky);border-radius:.25em;padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.ann-on .mark-red{background:var(--t-peach);border-radius:.25em;padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.ann-on .ann-mark--underline{text-decoration:underline;text-decoration-color:var(--peach);text-decoration-thickness:.17em;text-underline-offset:.18em}
+.ann-on .ann-mark--box{outline:2.5px solid var(--ink);outline-offset:2px;border-radius:4px}
+.ann-on .ann-mark--circle{padding:.15em .45em;background:no-repeat center/100% 100% url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M44 8 C26 7 9 16 7 29 C5 42 24 51 70 53 C128 55 178 49 191 36 C199 28 193 16 168 11 C140 6 96 5 52 9 C40 10 28 13 22 18' fill='none' stroke='%23d9826a' stroke-width='3' stroke-linecap='round'/></svg>")}
+[data-theme="contrast"].ann-on .ann-mark--circle{background:none;border:2px solid #ffd54a;border-radius:50%}
+.ann-on .ann-bracket-para{border-left:4px solid var(--peach);border-right:4px solid var(--peach);border-radius:6px;padding:0 1rem}
+.ann-on .ann-mark--flag::after{content:attr(data-glyph);display:inline-grid;place-items:center;min-width:1.15em;height:1.15em;margin-left:.15em;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--display);font-size:.8em;line-height:1;vertical-align:.45em;color:var(--ink);background:var(--t-teal)}
+.ann-on .ann-mark--flag[data-glyph="?"]::after{background:var(--t-peach)}
+.ann-on .ann-mark--flag[data-glyph="★"]::after{background:var(--t-mustard)}
+
+@media (min-width:1080px){
+.ann-on main{max-width:68rem}
+.ann-on .reading-row{display:grid;grid-template-columns:minmax(0,1fr) 19rem;gap:3rem;align-items:start}
+.ann-on .reading-row>.text-col{max-width:42rem;margin:0 auto}
+.ann-on .ann-col:not(:empty){margin:.2rem 0 1.6rem;max-width:none}
+.ann-on .ann-col:empty{display:block}
+.ann-on .section-heading{margin-bottom:1.2rem}
+}
+
+.ann-toggle{position:fixed;left:1rem;bottom:1rem;z-index:15;display:inline-flex;align-items:center;gap:.5rem;font-family:"Lexend",system-ui,sans-serif;font-weight:700;font-size:.95rem;color:var(--ink);background:var(--card);border:2.5px solid var(--ink);border-radius:999px;padding:.6rem 1rem;cursor:pointer;box-shadow:3px 3px 0 var(--lilac)}
+.ann-toggle svg{width:1.15rem;height:1.15rem}
+.ann-toggle[aria-pressed="true"]{background:var(--t-lilac)}
+[data-theme="contrast"] .ann-toggle[aria-pressed="true"]{background:#ffd54a;color:#000}
+
+footer{margin-top:2rem;background:#2F1414;color:#f6f1e7;font-family:"Lexend",system-ui,sans-serif;font-size:.8rem;padding:2.5rem 1rem 5.5rem}
+footer a{color:#f6f1e7}
+footer .big{font-family:var(--display);font-size:1.7rem;letter-spacing:.04em;margin:0 0 .5rem}
+[data-theme="contrast"] footer{background:#000;border-top:1px solid #fff}
+.a11y-toggle{position:fixed;right:1rem;bottom:1rem;z-index:15;width:3.1rem;height:3.1rem;border-radius:50%;border:2.5px solid var(--ink);background:var(--card);color:var(--ink);font-family:"Lexend",system-ui,sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--peach)}
+.a11y-panel{position:fixed;right:1rem;bottom:4.8rem;z-index:15;width:16.5rem;background:var(--card);color:var(--ink);border:2.5px solid var(--ink);border-radius:12px;padding:1rem;font-family:"Libre Franklin",system-ui,sans-serif;font-size:14px;text-align:left}
+.a11y-panel[hidden]{display:none}
+.a11y-group{border:0;margin:0 0 .8rem;padding:0}
+.a11y-group legend{font-weight:700;margin-bottom:.35rem}
+.a11y-group .opts{display:flex;flex-wrap:wrap;gap:.3rem}
+.a11y-group button{font:inherit;padding:.3rem .65rem;border:1px solid var(--ink);border-radius:6px;background:transparent;color:var(--ink);cursor:pointer}
+.a11y-group button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+@media (max-width:760px){.doodle{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{
+.topbar,.nav,.a11y-toggle,.a11y-panel,.ann-toggle,.controls,.doodle,.skip{display:none!important}
+html,body{background:#fff!important;color:#000!important}
+body{font-size:11pt}
+.hero{padding:0 0 .8rem;border:0}.hero h1 .hl{background:none;padding:0}
+main{max-width:none!important;padding:0}
+.section{padding-top:1.2rem}.divider{display:none}
+.reading-row{display:block!important;break-inside:avoid}
+.ann-col:not(:empty){display:block!important;margin:.2rem auto .9rem!important;max-width:32rem}
+.ann-col .margin-ornament,.ann-col .ann-doodle{display:none!important}
+.annotation{display:block!important;box-shadow:none!important;border:1.5pt solid #000!important;background:#fff!important;padding:.8rem .8rem .5rem!important}
+.ann-symbol{background:#fff!important}
+.ann-legend{display:flex!important}
+footer{background:#fff;color:#000;padding:1rem;margin-top:1rem}
+body.worksheet-mode .ann-col,body.worksheet-mode .ann-legend,body.worksheet-mode .hero .sub{display:none!important}
+body.worksheet-mode .mark-yellow,body.worksheet-mode .mark-blue,body.worksheet-mode .mark-red,body.worksheet-mode .ann-mark--highlight,body.worksheet-mode .ann-mark--underline,body.worksheet-mode .ann-mark--box,body.worksheet-mode .ann-mark--circle{background:none!important;outline:none!important;border:none!important;text-decoration:none!important;padding:0!important}
+body.worksheet-mode .ann-mark--flag::after{content:none!important}
+body.worksheet-mode .ann-bracket-para{border:0!important;padding:0!important}
+body.worksheet-mode .text-col{max-width:62%!important;margin:0!important;text-align:left}
+body.worksheet-mode .section-heading,body.worksheet-mode .hero{text-align:left}
+body.worksheet-mode .text-col p{font-size:12pt!important;line-height:2.1!important;margin-bottom:1.4rem!important}
+body.worksheet-mode .text-col p.lede{font-size:13pt!important}
+body.worksheet-mode .section-heading{font-size:26pt!important}
+body.worksheet-mode .reading-row{break-inside:auto!important}
+body.worksheet-mode .text-col p{break-inside:avoid}
+body.worksheet-mode .worksheet-header span{white-space:nowrap}
+body.worksheet-mode .worksheet-header{display:flex!important;justify-content:space-between;gap:2rem;font-size:11pt;border-bottom:1.5pt solid #000;padding-bottom:.5rem;margin-bottom:1.5rem}
+body.worksheet-mode footer{display:none}
+}
 </style>
-
-
-  <style>
-
-    @font-face {
-      font-family: 'OpenDyslexic';
-      src: url("assets/2282dbd646a0.woff") format('woff');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'OpenDyslexic';
-      src: url("assets/bcd28ad457ec.woff") format('woff');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'OpenDyslexic';
-      src: url("assets/4d70f4a19937.woff") format('woff');
-      font-weight: 400;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'OpenDyslexic';
-      src: url("assets/b1cfaedf2622.woff") format('woff');
-      font-weight: 700;
-      font-style: italic;
-      font-display: swap;
-    }
-
-    :root {
-      --color-bg:             #FDFDFB;
-      --color-ink:            #2A1A0E;
-      --color-ink-mid:        rgba(42, 26, 14, 0.65);
-      --color-ink-faint:      #EAE6DC;
-      --color-sidebar-bg:     #F4F1EA;
-      --color-sidebar-border: #E6E1D3;
-      --color-rust:           #A9442A;
-      --color-slate:          #1A365D;
-      --color-advice:         #5A4632;
-      --mark-yellow-bg:       #F5DEB3;
-      --mark-blue-bg:         #C5DCE4;
-      --mark-red-bg:          #F0C9C0;
-      --font-display:         'Inter', system-ui, sans-serif;
-      --font-body:            'Lora', Georgia, serif;
-      --font-editorial:       'IM Fell English', serif;
-      --font-mono:            'JetBrains Mono', monospace;
-      --measure:              70ch;
-      --sidebar-width:        290px;
-
-      --chrome-bg:            #1A1008;
-      --chrome-fg:            #FDFDFB;
-      --pill-bg:              #2A1A0E;
-      --pill-fg:              #FDFDFB;
-      --pill-bg-active:       var(--color-rust);
-      --pill-fg-active:       #FDFDFB;
-
-      --ornament-ink:         #3a2510;
-      --ornament-fill:        #e8d9b8;
-      --ornament-accent:      #7a5230;
-    }
-
-    body.theme-dark {
-      --color-bg:             #121212;
-      --color-ink:            #F0F0F0;
-      --color-ink-mid:        #A5A5A5;
-      --color-ink-faint:      #2F2F2F;
-      --color-sidebar-bg:     #1A1A1A;
-      --color-sidebar-border: #2D2D2D;
-      --color-rust:           #E57C63;
-      --color-slate:          #9EC3E6;
-      --color-advice:         #C9B89A;
-      --mark-yellow-bg:       #40331A;
-      --mark-blue-bg:         #1A2D40;
-      --mark-red-bg:          #401F1A;
-
-      --chrome-bg:            #0C0C0C;
-      --chrome-fg:            #F0F0F0;
-      --pill-bg:              #F0F0F0;
-      --pill-fg:              #121212;
-      --pill-bg-active:       var(--color-rust);
-      --pill-fg-active:       #121212;
-
-      --ornament-ink:         #D9C9A8;
-      --ornament-fill:        rgba(217,201,168,0.10);
-      --ornament-accent:      #8A6A48;
-    }
-    body.theme-contrast {
-      --color-bg:             #FFFFFF;
-      --color-ink:            #000000;
-      --color-ink-mid:        #000000;
-      --color-ink-faint:      #DDDDDD;
-      --color-sidebar-bg:     #F0F0F0;
-      --color-sidebar-border: #000000;
-      --color-rust:           #BF0000;
-      --color-slate:          #00008B;
-      --color-advice:         #000000;
-      --mark-yellow-bg:       #FFE680;
-      --mark-blue-bg:         #A8D5E2;
-      --mark-red-bg:          #FFB3A8;
-
-      --chrome-bg:            #000000;
-      --chrome-fg:            #FFFFFF;
-      --pill-bg:              #000000;
-      --pill-fg:              #FFFFFF;
-      --pill-bg-active:       #BF0000;
-      --pill-fg-active:       #FFFFFF;
-
-      --ornament-ink:         #000000;
-      --ornament-fill:        none;
-      --ornament-accent:      #000000;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-
-    html { font-size: 100%; }
-    html.text-size-2 { font-size: 113%; }
-    html.text-size-3 { font-size: 126%; }
-
-    body {
-      background-color: var(--color-bg);
-      color: var(--color-ink);
-      font-family: var(--font-body);
-      font-size: 1.15rem;
-      line-height: 1.75;
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.2s ease, color 0.2s ease;
-    }
-    body.font-sans    { font-family: var(--font-display) !important; }
-    body.font-dyslexia { font-family: 'OpenDyslexic', sans-serif !important; }
-    body.font-dyslexia .annotation { font-family: 'OpenDyslexic', sans-serif !important; }
-
-    .skip-link {
-      position: absolute;
-      top: -100px;
-      left: 1rem;
-      background: var(--color-rust);
-      color: #fff;
-      padding: 0.5rem 1rem;
-      z-index: 1000;
-      font-family: var(--font-display);
-      font-size: 0.9rem;
-      text-decoration: none;
-    }
-    .skip-link:focus { top: 1rem; }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      background-color: var(--chrome-bg);
-      z-index: 500;
-      transition: background-color 0.2s ease;
-    }
-
-    .site-header__bar {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0.85rem 2rem;
-    }
-
-    .site-header__nav ul {
-      display: flex;
-      list-style: none;
-      gap: 2.25rem;
-      margin: 0;
-      padding: 0;
-    }
-
-    .site-header__nav a {
-      color: rgba(253, 253, 251, 0.5);
-      text-decoration: none;
-      font-family: var(--font-display);
-      font-size: 0.78rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      transition: color 0.15s;
-      padding-bottom: 2px;
-    }
-    .site-header__nav a:hover,
-    .site-header__nav a:focus,
-    .site-header__nav a.is-active {
-      color: #FDFDFB;
-      box-shadow: 0 1px 0 0 rgba(253, 253, 251, 0.45);
-      outline: none;
-    }
-
-    .site-header__actions {
-      position: absolute;
-      right: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .site-header__brand {
-      position: absolute;
-      left: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-    }
-    .site-header__logo {
-      display: block;
-      height: 40px;
-      width: 40px;
-    }
-    @media (max-width: 879px) {
-      .site-header__brand { display: none; }
-    }
-
-    .settings-btn {
-      background: transparent;
-      border: none;
-      color: rgba(253, 253, 251, 0.45);
-      padding: 0.4rem 0.45rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      border-radius: 4px;
-      transition: color 0.15s, background-color 0.15s;
-    }
-    .settings-btn:hover,
-    .settings-btn:focus-visible {
-      color: #FDFDFB;
-      background-color: rgba(253, 253, 251, 0.1);
-      outline: none;
-    }
-    .settings-btn svg {
-      display: block;
-      width: 17px;
-      height: 17px;
-    }
-
-    .annotation-float {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      padding: 0.6rem 1.25rem 0.6rem 1rem;
-      background-color: var(--pill-bg);
-      color: var(--pill-fg);
-      border: none;
-      border-radius: 999px;
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-      transition: background-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.1s;
-    }
-    .annotation-float:hover {
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24);
-      transform: translateY(-1px);
-    }
-    .annotation-float:focus-visible {
-      outline: 2px solid var(--color-rust);
-      outline-offset: 3px;
-    }
-    body.annotations-visible .annotation-float {
-      background-color: var(--pill-bg-active);
-      color: var(--pill-fg-active);
-    }
-    .annotation-float__icon {
-      width: 15px;
-      height: auto;
-      display: block;
-    }
-
-    .settings-panel {
-      background: var(--chrome-bg);
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height 0.2s ease-out, background-color 0.2s ease;
-    }
-    .settings-panel.is-open { max-height: 340px; }
-    @media (min-width: 880px) {
-      .settings-panel.is-open { max-height: 140px; }
-    }
-    @media (min-width: 1180px) {
-      .settings-panel.is-open { max-height: 80px; }
-    }
-
-    .settings-panel__inner {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 0.85rem 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2.5rem;
-    }
-
-    .ctrl-cluster {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      border: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .ctrl-label {
-      font-family: var(--font-display);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: rgba(253,253,251,0.5);
-      margin-right: 0.5rem;
-      font-weight: 600;
-    }
-
-    .ctrl-btn {
-      background: transparent;
-      border: 1px solid rgba(253,253,251,0.25);
-      color: rgba(253,253,251,0.7);
-      padding: 0.2rem 0.85rem;
-      border-radius: 999px;
-      font-family: var(--font-display);
-      font-size: 0.78rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.1s, border-color 0.1s, color 0.1s;
-    }
-    .ctrl-btn[aria-pressed="true"] {
-      border-color: rgba(253,253,251,0.9);
-      background-color: rgba(253,253,251,0.15);
-      color: #FDFDFB;
-      font-weight: 600;
-    }
-    .ctrl-btn:hover:not([aria-pressed="true"]) {
-      border-color: rgba(253,253,251,0.5);
-      background-color: rgba(253,253,251,0.08);
-      color: rgba(253,253,251,0.9);
-    }
-
-    main {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 5rem 2rem 6rem;
-    }
-    @media (min-width: 1040px) {
-      main { max-width: 820px; transition: max-width 0.25s ease; }
-      body.annotations-visible main { max-width: 1300px; }
-    }
-
-    .page-title {
-      font-family: var(--font-editorial);
-      font-size: 3.5rem;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      margin: 0 0 0.25rem;
-      line-height: 1.1;
-      text-align: center;
-    }
-
-    .page-subtitle {
-      font-style: italic;
-      font-size: 1.35rem;
-      color: var(--color-ink-mid);
-      margin: 0 0 3rem;
-      text-align: center;
-    }
-
-    .ann-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding-bottom: 1.25rem;
-      border-bottom: 1px solid var(--color-ink-faint);
-      justify-content: center;
-      max-height: 0;
-      overflow: hidden;
-      margin-bottom: 0;
-      opacity: 0;
-      pointer-events: none;
-      transition: max-height 0.3s ease, opacity 0.25s ease, margin-bottom 0.3s ease;
-    }
-    body.annotations-visible .ann-legend {
-      max-height: 80px;
-      opacity: 1;
-      margin-bottom: 4rem;
-      pointer-events: auto;
-    }
-
-    .ann-legend__label { color: var(--color-ink-mid); font-weight: 700; }
-    .ann-legend__item  { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; }
-    .ann-legend__dot   { width: 8px; height: 8px; }
-
-    .ann-legend__item--note     .ann-legend__dot { background-color: var(--color-slate); }
-    .ann-legend__item--question .ann-legend__dot { background-color: var(--color-rust); }
-    .ann-legend__item--advice   .ann-legend__dot { background-color: var(--color-advice); }
-
-    .ann-legend__glyph {
-      font-family: var(--font-display);
-      font-weight: 700;
-      margin-right: 0.05rem;
-    }
-    .ann-legend__item--note     .ann-legend__glyph { color: var(--color-slate); }
-    .ann-legend__item--question .ann-legend__glyph { color: var(--color-rust); }
-    .ann-legend__item--advice   .ann-legend__glyph { color: var(--color-advice); }
-
-    .section-heading {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin: 2rem 0 1rem;
-      max-width: var(--measure);
-      text-align: center;
-    }
-
-    .reading-row {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 1.5rem;
-    }
-
-    @media (min-width: 1040px) {
-      .reading-row {
-        flex-direction: row;
-        align-items: stretch;
-        gap: 4rem;
-        margin-bottom: 0;
-      }
-    }
-
-    @media (min-width: 1040px) {
-      body.annotations-visible .reading-row:has(.ann-col:not(:empty)) .text-col:not(.coda) > p {
-        opacity: 0.82;
-        transition: opacity 0.2s ease;
-      }
-      body.annotations-visible .reading-row:has(.ann-col:not(:empty)):hover .text-col > p,
-      body.annotations-visible .reading-row:has(.ann-col:not(:empty)):focus-within .text-col > p {
-        opacity: 1;
-      }
-    }
-
-    .text-col {
-      width: 100%;
-      max-width: var(--measure);
-    }
-    @media (min-width: 1040px) {
-      .text-col { padding: 1.25rem 0; }
-    }
-    .text-col p            { margin: 0 0 1.5rem; }
-    .text-col p:last-child { margin-bottom: 0; }
-
-    .lede { font-size: 1.35rem; line-height: 1.7; }
-    .coda { font-size: 1.25rem; font-style: italic; }
-
-    .divider        { padding: 3rem 0; max-width: var(--measure); }
-    .divider-asset  { display: block; max-width: 100px; margin: 0; height: auto; }
-
-    .ann-col { display: none; }
-
-    @media (max-width: 1039px) {
-      body.annotations-visible .ann-col:not(:empty) {
-        display: block;
-        margin-top: -0.25rem;
-        margin-bottom: 1.25rem;
-      }
-      body.annotations-visible .ann-col:not(:empty) aside.annotation {
-        display: block;
-        padding: 0.65rem 1rem;
-        background-color: var(--color-sidebar-bg);
-        font-family: var(--font-mono);
-        font-size: 0.82rem;
-        line-height: 1.6;
-        letter-spacing: 0.01em;
-      }
-      body.annotations-visible .ann-col .annotation--note {
-        border-left: 3px solid var(--color-slate);
-        color: var(--color-slate);
-      }
-      body.annotations-visible .ann-col .annotation--question {
-        border-left: 3px solid var(--color-rust);
-        color: var(--color-rust);
-      }
-      body.annotations-visible .ann-col .annotation--advice {
-        border-left: 3px solid var(--color-advice);
-        color: var(--color-advice);
-      }
-      body.annotations-visible .ann-col .margin-ornament,
-      body.annotations-visible .ann-col .ann-doodle:not(.ann-doodle--sloth-end) {
-        display: none;
-      }
-      body.annotations-visible .ann-col .ann-doodle--sloth-end {
-        display: block;
-        width: 120px;
-        margin: 0.75rem auto 0;
-      }
-    }
-
-    @media (min-width: 1040px) {
-      .ann-col {
-        display: block;
-        width: var(--sidebar-width);
-        min-width: var(--sidebar-width);
-        padding: 1.25rem 1.75rem;
-        border-left: 1px solid transparent;
-        background-color: transparent;
-        opacity: 0;
-        pointer-events: none;
-        transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-      }
-      body.annotations-visible .ann-col {
-        opacity: 1;
-        pointer-events: auto;
-        background-color: var(--color-sidebar-bg);
-        border-left: 1px solid var(--color-sidebar-border);
-      }
-    }
-
-    .annotation {
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      line-height: 1.6;
-      letter-spacing: 0.01em;
-    }
-    .annotation p { margin: 0; }
-
-    .annotation--note     { color: var(--color-slate); }
-    .annotation--question { color: var(--color-rust); }
-    .annotation--advice   { color: var(--color-advice); }
-
-    .ann-symbol {
-      display: block;
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-    }
-    .ann-text--thesis { font-weight: 700; }
-
-    .ann-doodle            { display: block; height: auto; margin-bottom: 0.75rem; }
-    .ann-doodle--sloth     { width: 133px; }
-    .ann-doodle--scale     { width: 83px; }
-    .ann-doodle--pointer   { width: 119px; transform: scaleX(-1); }
-    .ann-doodle--cat       { width: 86px; }
-    .ann-doodle--owl       { width: 86px; }
-    .ann-doodle--candle    { width: 57px; }
-    .ann-doodle--sloth-end { width: 166px; margin-top: 1rem; }
-
-    .margin-ornament { display: block; }
-    .ornament-asset  { display: block; width: 100px; height: auto; transform: scaleX(-1); }
-
-    body.annotations-visible .mark-yellow { background-color: var(--mark-yellow-bg); color: inherit; }
-    body.annotations-visible .mark-blue   { background-color: var(--mark-blue-bg);   color: inherit; }
-    body.annotations-visible .mark-red    { background-color: var(--mark-red-bg);    color: inherit; }
-
-    body.annotations-visible .ann-mark--highlight {
-      background-color: var(--mark-yellow-bg);
-      padding: 0.05rem 0.15rem;
-    }
-    body.annotations-visible .ann-mark--underline {
-      box-shadow: inset 0 -2px 0 0 var(--color-rust);
-    }
-    body.annotations-visible .ann-bracket-para {
-      border-left: 3px solid var(--color-rust);
-      padding-left: 1.25rem;
-    }
-
-    body.annotations-visible .ann-mark--box {
-      outline: 1.5px solid var(--color-slate);
-      outline-offset: 2px;
-      border-radius: 2px;
-    }
-
-    body.annotations-visible .ann-mark--circle {
-      position: relative;
-      display: inline;
-      padding: 0.1em 0.35em;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M44 8 C26 7 9 16 7 29 C5 42 24 51 70 53 C128 55 178 49 191 36 C199 28 193 16 168 11 C140 6 96 5 52 9 C40 10 28 13 22 18' fill='none' stroke='%23A9442A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100% 100%;
-    }
-    body.theme-dark.annotations-visible .ann-mark--circle {
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M44 8 C26 7 9 16 7 29 C5 42 24 51 70 53 C128 55 178 49 191 36 C199 28 193 16 168 11 C140 6 96 5 52 9 C40 10 28 13 22 18' fill='none' stroke='%23E57C63' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-    }
-    body.theme-contrast.annotations-visible .ann-mark--circle {
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M44 8 C26 7 9 16 7 29 C5 42 24 51 70 53 C128 55 178 49 191 36 C199 28 193 16 168 11 C140 6 96 5 52 9 C40 10 28 13 22 18' fill='none' stroke='%23BF0000' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-    }
-
-    body.annotations-visible .ann-mark--flag::after {
-      content: attr(data-glyph);
-      font-family: var(--font-display);
-      font-weight: 700;
-      margin-left: 0.15em;
-      font-size: 0.85em;
-      vertical-align: super;
-      line-height: 0;
-    }
-    body.annotations-visible .ann-mark--flag[data-glyph="!"]::after { color: var(--color-slate); }
-    body.annotations-visible .ann-mark--flag[data-glyph="?"]::after { color: var(--color-rust); }
-    body.annotations-visible .ann-mark--flag[data-glyph="★"]::after { color: var(--color-advice); }
-
-    @media (max-width: 879px) {
-      .site-header__bar {
-        padding: 0.75rem 3rem;
-      }
-      .site-header__nav {
-        overflow-x: auto;
-        white-space: nowrap;
-        padding-bottom: 0.2rem;
-        -webkit-overflow-scrolling: touch;
-      }
-      .site-header__nav ul { gap: 1.25rem; }
-      .site-header__actions {
-        right: 0.75rem;
-      }
-      main {
-        padding: 3rem 1.5rem 6rem;
-      }
-      .page-title    { font-size: 2.5rem; }
-      .page-subtitle { font-size: 1.15rem; }
-      .annotation-float {
-        bottom: 1.25rem;
-        right: 1.25rem;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
-        scroll-behavior: auto !important;
-      }
-      .annotation-float:hover { transform: none; }
-    }
-
-    @media print {
-      .site-header,
-      .settings-panel,
-      .annotation-float,
-      .skip-link { display: none !important; }
-
-      html, body {
-        background: #fff !important;
-        color: #000 !important;
-        font-size: 11pt;
-      }
-
-      main { padding: 0; max-width: none; }
-
-      .reading-row { display: block !important; opacity: 1 !important; }
-      .text-col { max-width: none; padding: 0; }
-
-      .ann-col:not(:empty) {
-        display: block !important;
-        opacity: 1 !important;
-        background: none !important;
-        border-left: 2pt solid #000 !important;
-        padding: 0.2rem 0 0.2rem 0.6rem !important;
-        margin: 0.3rem 0 0.8rem !important;
-        width: auto !important;
-        min-width: 0 !important;
-      }
-      .annotation { color: #000 !important; font-size: 9pt; }
-      .annotation--note,
-      .annotation--question,
-      .annotation--advice { color: #000 !important; }
-
-      svg { --ornament-ink: #000 !important; --ornament-fill: #fff !important; --ornament-accent: #000 !important; }
-
-      .mark-yellow, .mark-blue, .mark-red,
-      .ann-mark--highlight { background: none !important; box-shadow: none !important; }
-      .ann-mark--highlight,
-      .ann-mark--underline { box-shadow: inset 0 -1.5pt 0 0 #000 !important; }
-      .ann-bracket-para { border-left: 2pt solid #000 !important; }
-      .ann-mark--circle {
-        background-image: none !important;
-        border: 1.5pt solid #000 !important;
-        border-radius: 50% !important;
-        padding: 0.05em 0.4em !important;
-      }
-      .ann-mark--flag::after {
-        content: attr(data-glyph) !important;
-        color: #000 !important;
-      }
-
-      .ann-legend {
-        max-height: none !important; opacity: 1 !important;
-        margin-bottom: 1rem !important; color: #000 !important;
-      }
-
-      a { color: #000 !important; text-decoration: underline; }
-      .reading-row { break-inside: avoid; }
-
-      body.worksheet-mode .ann-col { display: none !important; }
-      body.worksheet-mode .ann-legend { display: none !important; }
-      body.worksheet-mode .divider-asset { display: none !important; }
-      body.worksheet-mode .divider { padding: 1.2rem 0 !important; }
-
-      body.worksheet-mode .mark-yellow,
-      body.worksheet-mode .mark-blue,
-      body.worksheet-mode .mark-red,
-      body.worksheet-mode .ann-mark--highlight,
-      body.worksheet-mode .ann-mark--underline,
-      body.worksheet-mode .ann-mark--box,
-      body.worksheet-mode .ann-mark--circle {
-        background: none !important;
-        background-image: none !important;
-        box-shadow: none !important;
-        outline: none !important;
-        border: none !important;
-        border-radius: 0 !important;
-        padding: 0 !important;
-      }
-      body.worksheet-mode .ann-mark--flag::after { content: none !important; }
-      body.worksheet-mode .ann-bracket-para {
-        border-left: none !important;
-        padding-left: 0 !important;
-      }
-
-      body.worksheet-mode .text-col { max-width: 62% !important; }
-      body.worksheet-mode .text-col p {
-        line-height: 2.1 !important;
-        margin-bottom: 1.5rem !important;
-      }
-      body.worksheet-mode .lede { font-size: 13pt !important; }
-
-      body.worksheet-mode .worksheet-header { display: flex !important; }
-    }
-
-    .worksheet-header { display: none; }
-    .worksheet-header {
-      justify-content: space-between;
-      gap: 2rem;
-      font-family: var(--font-display);
-      font-size: 11pt;
-      color: #000;
-      border-bottom: 1.5pt solid #000;
-      padding-bottom: 0.5rem;
-      margin-bottom: 2rem;
-    }
-    .worksheet-header span { white-space: nowrap; }
-
-    .settings-action {
-      background: transparent;
-      border: 1px solid rgba(253,253,251,0.35);
-      color: rgba(253,253,251,0.8);
-      padding: 0.25rem 0.85rem;
-      border-radius: 999px;
-      font-family: var(--font-display);
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: background-color 0.1s, border-color 0.1s, color 0.1s;
-    }
-    .settings-action:hover,
-    .settings-action:focus-visible {
-      border-color: #FDFDFB;
-      color: #FDFDFB;
-      background-color: rgba(253,253,251,0.1);
-      outline: none;
-    }
-    .settings-action svg { width: 13px; height: 13px; display: block; }
-
-  </style>
 </head>
 <body>
-
-<a href="#main" class="skip-link">Skip to main content</a>
+<a class="skip" href="#main">Skip to content</a>
 <div aria-live="polite" aria-atomic="true" class="sr-only" id="toggle-announcement"></div>
+<div class="topbar"><a href="/librarylyceum/guides.html">WEHS Library Lyceum</a> research guides presents...</div>
 
-<header class="site-header" role="banner">
-  <div class="site-header__bar">
-    <div class="site-header__brand">
-      <img class="site-header__logo" src="assets/170424c2bd33.png" alt="West Essex High School Library Media Center logo" />
-    </div>
-    <nav class="site-header__nav" aria-label="Page sections">
-      <ul>
-        <li><a href="#argument">Why Read?</a></li>
-        <li><a href="#why-bother">Why Write?</a></li>
-        <li><a href="#before-you-begin">Before You Begin&hellip;</a></li>
-        <li><a href="#mark-it-up">Make Your Mark!</a></li>
-        <li><a href="#write-your-notes">Make Yourself Heard!</a></li>
-        <li><a href="#get-out-there">Iterate and Explore!</a></li>
-      </ul>
-    </nav>
-
-    <div class="site-header__actions">
-      <button class="settings-btn" id="settings-btn" aria-expanded="false" aria-controls="settings-panel" aria-label="Display settings">
-        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-        </svg>
-      </button>
-    </div>
-  </div>
-</header>
-
-<button class="annotation-float" id="annotation-toggle" aria-pressed="false" title="Keyboard shortcut: Alt+A">
-  <svg class="annotation-float__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 35" role="img" aria-label="Quill pen">
-  <path d="M22 3 C27 5 27 12 24 17 C20 22 14 27 8 28 C5 29 4 30 4 30 C5 29 7 27 7 25 C3 22 2 16 5 11 C9 5 17 0 22 3 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M21 4 L5 30" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M19 8 C22 10 23 14 21 17" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-  <path d="M15 14 C18 16 18 19 16 22" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-  <path d="M17 9 C13 8 9 9 7 13" stroke="var(--ornament-ink)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-  <path d="M13 15 C9 14 6 15 5 18" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-  <path d="M5 30 L3 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
-  <path d="M5 30 L7 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
-</svg>
-  <span id="toggle-label">Show Annotations</span>
-</button>
-
-<div class="settings-panel" id="settings-panel" role="region" aria-label="Display settings" aria-hidden="true" inert>
-  <div class="settings-panel__inner">
-
-    <div class="ctrl-cluster" role="group" aria-label="Text size">
-      <span class="ctrl-label" aria-hidden="true">Text size</span>
-      <button class="ctrl-btn" data-size="1" aria-pressed="true"  aria-label="Standard text size">A</button>
-      <button class="ctrl-btn" data-size="2" aria-pressed="false" aria-label="Large text size">A+</button>
-      <button class="ctrl-btn" data-size="3" aria-pressed="false" aria-label="Extra large text size">A++</button>
-    </div>
-
-    <div class="ctrl-cluster" role="group" aria-label="Typeface">
-      <span class="ctrl-label" aria-hidden="true">Typeface</span>
-      <button class="ctrl-btn" data-font="serif"    aria-pressed="true"  aria-label="Serif typeface">Serif</button>
-      <button class="ctrl-btn" data-font="sans"     aria-pressed="false" aria-label="Sans-serif typeface">Sans</button>
-      <button class="ctrl-btn" data-font="dyslexia" aria-pressed="false" aria-label="Dyslexia-friendly typeface">Dyslexia</button>
-    </div>
-
-    <div class="ctrl-cluster" role="group" aria-label="Color theme">
-      <span class="ctrl-label" aria-hidden="true">Theme</span>
-      <button class="ctrl-btn" data-theme="light"    aria-pressed="true"  aria-label="Light theme">Light</button>
-      <button class="ctrl-btn" data-theme="dark"     aria-pressed="false" aria-label="Dark theme">Dark</button>
-      <button class="ctrl-btn" data-theme="contrast" aria-pressed="false" aria-label="High contrast theme">Contrast</button>
-    </div>
-
-    <div class="ctrl-cluster" role="group" aria-label="Worksheet">
-      <span class="ctrl-label" aria-hidden="true">Worksheet</span>
-      <button class="settings-action" id="print-blank" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Print blank copy
-      </button>
-    </div>
-
-  </div>
-</div>
-
-<main id="main">
-
-  <div class="worksheet-header" aria-hidden="true">
-    <span>Name: _______________________</span>
-    <span>Date: ______________</span>
-    <span>Class: ______________</span>
-  </div>
-
-  <header class="page-header">
-    <h1 class="page-title">On Annotation</h1>
-    <p class="page-subtitle">A Handbook for Active Readers</p>
-    <div class="ann-legend" aria-label="Annotation color key" role="note">
+<header class="hero">
+<svg class="doodle" style="left:3%;top:12%;width:110px" viewBox="0 0 120 160" aria-hidden="true" focusable="false"><path d="M20 10c40 20 70 60 30 80-30 15-40-30-5-30 40 0 60 50 20 90" stroke="#BEA1C8"/></svg>
+<svg class="doodle" style="right:4%;bottom:10%;width:120px" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><path d="M100 10c-10 40-60 30-60 70 0 30 50 30 45 0-5-25-50-20-70 20" stroke="#6FADB0"/></svg>
+<svg class="doodle" style="right:10%;top:14%;width:70px" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><path d="M10 60c10-40 50-50 60-20s-30 30-30 10 30-30 30-40" stroke="#E8BF7A"/></svg>
+<h1><span class="hl">On Annotation</span></h1>
+<p class="sub">A Handbook for Active Readers</p>
+<div class="ann-legend" aria-label="Annotation color key" role="note">
       <span class="ann-legend__label">Annotations:</span>
       <span class="ann-legend__item ann-legend__item--note">
         <span class="ann-legend__dot" aria-hidden="true"></span><span class="ann-legend__glyph" aria-hidden="true">!</span>Notes
@@ -925,13 +198,44 @@
         <span class="ann-legend__dot" aria-hidden="true"></span><span class="ann-legend__glyph" aria-hidden="true">&#9733;</span>Advice
       </span>
     </div>
-  </header>
+<div class="controls">
+<button class="btn" id="hero-toggle" type="button" aria-pressed="false" style="--c:var(--lilac)"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 35" role="img" aria-label="Quill pen">
+  <path d="M22 3 C27 5 27 12 24 17 C20 22 14 27 8 28 C5 29 4 30 4 30 C5 29 7 27 7 25 C3 22 2 16 5 11 C9 5 17 0 22 3 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M21 4 L5 30" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M19 8 C22 10 23 14 21 17" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M15 14 C18 16 18 19 16 22" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M17 9 C13 8 9 9 7 13" stroke="var(--ornament-ink)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M13 15 C9 14 6 15 5 18" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M5 30 L3 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+  <path d="M5 30 L7 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+</svg><span class="tl">Show Annotations</span></button>
+<a class="btn" id="print-blank" href="sheets/blank-copy.pdf" target="_blank" rel="noopener" style="--c:var(--mustard);text-decoration:none"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2M7 14h10v7H7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Print blank copy</a>
+</div>
+</header>
+
+<nav class="nav" aria-label="Page sections">
+<ol>
+<li><a href="#argument">Why Read?</a></li>
+<li><a href="#why-bother">Why Write?</a></li>
+<li><a href="#before-you-begin">Before You Begin&hellip;</a></li>
+<li><a href="#mark-it-up">Make Your Mark!</a></li>
+<li><a href="#write-your-notes">Make Yourself Heard!</a></li>
+<li><a href="#get-out-there">Iterate and Explore!</a></li>
+</ol>
+</nav>
+
+<main id="main">
+<div class="worksheet-header" aria-hidden="true">
+    <span>Name: _______________________</span>
+    <span>Date: ______________</span>
+    <span>Class: ______________</span>
+  </div>
 
   <section id="argument" class="section" aria-labelledby="argument-heading">
 
     <div class="reading-row">
       <div class="text-col">
-        <h2 class="section-heading" id="argument-heading">Why Read?</h2>
+        <h2 class="section-heading" id="argument-heading"><span class="hl" style="--c:var(--t-peach)">Why Read?</span></h2>
       </div>
       <div class="ann-col"></div>
     </div>
@@ -1109,7 +413,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <h2 class="section-heading" id="why-bother-heading">Why Write?</h2>
+        <h2 class="section-heading" id="why-bother-heading"><span class="hl" style="--c:var(--t-teal)">Why Write?</span></h2>
       </div>
       <div class="ann-col">
         <aside class="margin-ornament" aria-hidden="true">
@@ -1190,12 +494,12 @@
   <path d="M47 52 C52 53 58 54 62 55" stroke="var(--ornament-ink)" stroke-width="0.9" fill="none" stroke-linecap="round" opacity="0.6"/>
   <path d="M24 68 C20 68 18 72 22 74 C26 76 32 75 34 72 C34 69 30 68 24 68 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M66 68 C70 68 72 72 68 74 C64 76 58 75 56 72 C56 69 60 68 66 68 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M24 70 C24 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
-  <path d="M28 70 C28 75" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
-  <path d="M32 70 C32 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
-  <path d="M58 70 C58 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
-  <path d="M62 70 C62 75" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
-  <path d="M66 70 C66 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M24 70 L24 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M28 70 L28 75" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M32 70 L32 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M58 70 L58 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M62 70 L62 75" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <path d="M66 70 L66 74" stroke="var(--ornament-ink)" stroke-width="0.8" fill="none" opacity="0.35" stroke-linecap="round"/>
   <path d="M24 66 C12 60 8 48 14 38 C18 30 26 28 30 32" stroke="var(--ornament-ink)" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M24 66 C12 60 8 48 14 38 C18 30 26 28 30 32" stroke="var(--ornament-fill)" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
   <path d="M40 62 C43 60 46 60 50 62" stroke="var(--ornament-ink)" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3"/>
@@ -1223,7 +527,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <h2 class="section-heading" id="before-you-begin-heading">Before You Begin&hellip;</h2>
+        <h2 class="section-heading" id="before-you-begin-heading"><span class="hl" style="--c:var(--t-mustard)">Before You Begin&hellip;</span></h2>
       </div>
       <div class="ann-col"></div>
     </div>
@@ -1336,7 +640,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <h2 class="section-heading" id="mark-it-up-heading">Make Your Mark!</h2>
+        <h2 class="section-heading" id="mark-it-up-heading"><span class="hl" style="--c:var(--t-lilac)">Make Your Mark!</span></h2>
       </div>
       <div class="ann-col"></div>
     </div>
@@ -1445,7 +749,7 @@
 
     <div class="reading-row">
       <div class="text-col">
-        <h2 class="section-heading" id="write-your-notes-heading">Make Yourself Heard!</h2>
+        <h2 class="section-heading" id="write-your-notes-heading"><span class="hl" style="--c:var(--t-mint)">Make Yourself Heard!</span></h2>
       </div>
       <div class="ann-col"></div>
     </div>
@@ -1612,188 +916,77 @@
       </div>
     </div>
   </section>
-
 </main>
 
+<footer>
+<p class="big">West Essex High School Library Media Center</p>
+<p><a href="/librarylyceum/">WEHS Library Lyceum</a></p>
+</footer>
+
+<button class="ann-toggle" id="annotation-toggle" type="button" aria-pressed="false" title="Keyboard shortcut: Alt+A"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 35" role="img" aria-label="Quill pen">
+  <path d="M22 3 C27 5 27 12 24 17 C20 22 14 27 8 28 C5 29 4 30 4 30 C5 29 7 27 7 25 C3 22 2 16 5 11 C9 5 17 0 22 3 Z" fill="var(--ornament-fill)" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M21 4 L5 30" stroke="var(--ornament-ink)" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M19 8 C22 10 23 14 21 17" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M15 14 C18 16 18 19 16 22" stroke="var(--ornament-ink)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M17 9 C13 8 9 9 7 13" stroke="var(--ornament-ink)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M13 15 C9 14 6 15 5 18" stroke="var(--ornament-ink)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M5 30 L3 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+  <path d="M5 30 L7 35" stroke="var(--ornament-ink)" stroke-width="1.9" stroke-linecap="round"/>
+</svg><span class="tl">Show Annotations</span></button>
+<button class="a11y-toggle" type="button" aria-expanded="false" aria-controls="a11y-panel" aria-label="Reading preferences">Aa</button>
+<div class="a11y-panel" id="a11y-panel" role="group" aria-label="Reading preferences" hidden>
+<fieldset class="a11y-group"><legend>Text size</legend><div class="opts" data-dim="size"><button type="button" data-v="small">Small</button><button type="button" data-v="medium">Medium</button><button type="button" data-v="large">Large</button></div></fieldset>
+<fieldset class="a11y-group"><legend>Theme</legend><div class="opts" data-dim="theme"><button type="button" data-v="light">Light</button><button type="button" data-v="dark">Dark</button><button type="button" data-v="contrast">High contrast</button></div></fieldset>
+<fieldset class="a11y-group"><legend>Typeface</legend><div class="opts" data-dim="font"><button type="button" data-v="serif">Serif</button><button type="button" data-v="sans">Sans</button><button type="button" data-v="dyslexic">OpenDyslexic</button></div></fieldset>
+</div>
 <script>
-  (function () {
-    'use strict';
-
-    var body          = document.body;
-    var toggleBtn     = document.getElementById('annotation-toggle');
-    var toggleLabel   = document.getElementById('toggle-label');
-    var announcement  = document.getElementById('toggle-announcement');
-    var navLinks      = document.querySelectorAll('.site-header__nav a');
-    var sections      = Array.from(document.querySelectorAll('section[id]'));
-    var settingsBtn   = document.getElementById('settings-btn');
-    var settingsPanel = document.getElementById('settings-panel');
-    var annotations   = document.querySelectorAll('aside.annotation, aside.margin-ornament');
-
-    function safeGetItem(key) {
-      try { return localStorage.getItem(key); } catch (e) { return null; }
-    }
-    function safeSetItem(key, value) {
-      try { localStorage.setItem(key, value); } catch (e) {  }
-    }
-
-    function toggleSettingsPanel(open) {
-      settingsPanel.classList.toggle('is-open', open);
-      settingsBtn.setAttribute('aria-expanded', String(open));
-      settingsPanel.setAttribute('aria-hidden', String(!open));
-      /* aria-hidden alone hides the panel from a screen reader while leaving
-         its buttons in the tab order, so a keyboard user lands on controls
-         that announce nothing. inert removes them from both at once. */
-      if (open) settingsPanel.removeAttribute('inert');
-      else settingsPanel.setAttribute('inert', '');
-    }
-
-    settingsBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      toggleSettingsPanel(!settingsPanel.classList.contains('is-open'));
-    });
-
-    document.addEventListener('click', function (e) {
-      if (settingsPanel.classList.contains('is-open') &&
-          !settingsPanel.contains(e.target) &&
-          !settingsBtn.contains(e.target)) {
-        toggleSettingsPanel(false);
-      }
-    });
-
-    var printBlankBtn = document.getElementById('print-blank');
-    function printWorksheet() {
-      body.classList.add('worksheet-mode');
-      window.print();
-    }
-    if (printBlankBtn) {
-      printBlankBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        printWorksheet();
-      });
-    }
-    window.addEventListener('afterprint', function () {
-      body.classList.remove('worksheet-mode');
-    });
-    if (window.location.search.indexOf('blank') !== -1) {
-      window.addEventListener('load', printWorksheet);
-    }
-
-    function setAnnotations(visible) {
-      body.classList.toggle('annotations-visible', visible);
-      if (toggleBtn)    toggleBtn.setAttribute('aria-pressed', String(visible));
-      if (toggleLabel)  toggleLabel.textContent = visible ? 'Hide Annotations' : 'Show Annotations';
-      safeSetItem('ann_annotations', visible ? '1' : '0');
-      annotations.forEach(function (el) {
-        el.setAttribute('aria-hidden', String(!visible));
-      });
-      if (announcement) {
-        announcement.textContent = visible
-          ? 'Annotations and highlights visible.'
-          : 'Annotations and highlights hidden.';
-        setTimeout(function () { announcement.textContent = ''; }, 1500);
-      }
-    }
-
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', function () {
-        setAnnotations(!body.classList.contains('annotations-visible'));
-      });
-    }
-
-    document.addEventListener('keydown', function (e) {
-      if (e.altKey && e.key.toLowerCase() === 'a') {
-        e.preventDefault();
-        setAnnotations(!body.classList.contains('annotations-visible'));
-        if (toggleBtn) toggleBtn.focus();
-      }
-    });
-
-    var sizeBtns = document.querySelectorAll('[data-size]');
-    function setSize(n) {
-      var root = document.documentElement;
-      root.classList.remove('text-size-1', 'text-size-2', 'text-size-3');
-      root.classList.add('text-size-' + n);
-      sizeBtns.forEach(function (btn) {
-        btn.setAttribute('aria-pressed', String(parseInt(btn.dataset.size, 10) === n));
-      });
-      safeSetItem('ann_size', n);
-    }
-    sizeBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        setSize(parseInt(btn.dataset.size, 10));
-      });
-    });
-
-    var fontBtns = document.querySelectorAll('[data-font]');
-    function setFont(name) {
-      body.classList.remove('font-sans', 'font-dyslexia');
-      if (name !== 'serif') body.classList.add('font-' + name);
-      fontBtns.forEach(function (btn) {
-        btn.setAttribute('aria-pressed', String(btn.dataset.font === name));
-      });
-      safeSetItem('ann_font', name);
-    }
-    fontBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () { setFont(btn.dataset.font); });
-    });
-
-    var themeBtns = document.querySelectorAll('[data-theme]');
-    function setTheme(name) {
-      body.classList.remove('theme-dark', 'theme-contrast');
-      if (name !== 'light') body.classList.add('theme-' + name);
-      themeBtns.forEach(function (btn) {
-        btn.setAttribute('aria-pressed', String(btn.dataset.theme === name));
-      });
-      safeSetItem('ann_theme', name);
-    }
-    themeBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () { setTheme(btn.dataset.theme); });
-    });
-
-    (function restorePrefs() {
-      try {
-        var savedAnn   = safeGetItem('ann_annotations');
-        var savedSize  = safeGetItem('ann_size');
-        var savedFont  = safeGetItem('ann_font');
-        var savedTheme = safeGetItem('ann_theme');
-        setAnnotations(savedAnn === '1');
-        setSize(savedSize ? parseInt(savedSize, 10) : 1);
-        setFont(savedFont  || 'serif');
-        setTheme(savedTheme || 'light');
-      } catch (e) {
-        setAnnotations(false);
-        setSize(1);
-        setFont('serif');
-        setTheme('light');
-      }
-    })();
-
-    function updateActiveSection() {
-      var scrollTop = window.scrollY || document.documentElement.scrollTop;
-      var offset    = 160;
-      var current   = '';
-      sections.forEach(function (section) {
-        if (section.offsetTop - offset <= scrollTop) current = section.id;
-      });
-      navLinks.forEach(function (link) {
-        link.classList.toggle('is-active',
-          link.getAttribute('href').replace('#', '') === current);
-      });
-    }
-
-    var ticking = false;
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        window.requestAnimationFrame(function () {
-          updateActiveSection();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
-
-    updateActiveSection();
-  })();
+(function(){
+var d=document.documentElement,K={size:"lyceum-size",theme:"lyceum-theme",font:"lyceum-font"};
+function sync(){document.querySelectorAll(".a11y-group .opts").forEach(function(g){var dim=g.getAttribute("data-dim");g.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(d.dataset[dim]===b.getAttribute("data-v")))})})}
+document.querySelectorAll(".a11y-group button").forEach(function(b){b.addEventListener("click",function(){var dim=b.parentNode.getAttribute("data-dim"),v=b.getAttribute("data-v");d.dataset[dim]=v;try{localStorage.setItem(K[dim],v)}catch(e){}sync()})});
+var t=document.querySelector(".a11y-toggle"),p=document.getElementById("a11y-panel");
+function close(){p.hidden=true;t.setAttribute("aria-expanded","false")}
+t.addEventListener("click",function(){p.hidden=!p.hidden;t.setAttribute("aria-expanded",String(!p.hidden));if(!p.hidden)p.querySelector("button").focus()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!p.hidden){close();t.focus()}});
+sync();
+})();
 </script>
+<script>
+(function(){
+var d=document.documentElement,body=document.body,btns=[document.getElementById("annotation-toggle"),document.getElementById("hero-toggle")],say=document.getElementById("toggle-announcement"),asides=document.querySelectorAll("aside.annotation, aside.margin-ornament");
+function set(v,announce){d.classList.toggle("ann-on",v);btns.forEach(function(b){b.setAttribute("aria-pressed",String(v));b.querySelector(".tl").textContent=v?"Hide Annotations":"Show Annotations"});asides.forEach(function(a){a.setAttribute("aria-hidden",String(!v||a.classList.contains("margin-ornament")))});try{localStorage.setItem("ann_annotations",v?"1":"0")}catch(e){}if(announce)say.textContent=v?"Annotations and highlights visible.":"Annotations and highlights hidden."}
+btns.forEach(function(b){b.addEventListener("click",function(){set(!d.classList.contains("ann-on"),true)})});
+document.addEventListener("keydown",function(e){if(e.altKey&&(e.key==="a"||e.key==="A"||e.code==="KeyA")){e.preventDefault();set(!d.classList.contains("ann-on"),true)}});
+set(d.classList.contains("ann-on"),false);
+function blank(){body.classList.add("worksheet-mode");window.print()}
+addEventListener("afterprint",function(){body.classList.remove("worksheet-mode")});
+if(location.search.indexOf("blank")!==-1)addEventListener("load",blank);
+})();
+</script>
+<script>(function(){if(window.__lyx)return;window.__lyx=2;
+var css=".lyx{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:4vmin;background:rgba(8,10,12,.94);cursor:zoom-out;overflow:auto}.lyx[hidden]{display:none}.lyx>img{max-width:100%;max-height:calc(100vh - 8vmin - 4.5rem);object-fit:contain;background:#fff}.lyx .lyx-c{width:min(100%,80rem);max-height:calc(100vh - 8vmin - 4.5rem);overflow:auto;font-size:clamp(1rem,1.9vw,1.9rem)}.lyx .lyx-c>*{margin:0!important;max-width:none!important;width:100%!important;cursor:zoom-out}.lyx .lyx-c svg,.lyx .lyx-c video,.lyx .lyx-c img{display:block;width:100%!important;max-width:none!important;height:auto!important;max-height:calc(100vh - 12vmin - 4.5rem)!important;margin:0 auto}.lyx .lyx-c .lyx-pad{background:#fff;color:#111;padding:2rem}.lyx .lyx-cap{color:#f1f1f1;font:15px/1.45 system-ui,sans-serif;max-width:60ch;text-align:center;margin:0}.lyx .lyx-x{position:absolute;top:12px;right:14px;font:700 13px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:transparent;border:2px solid #fff;padding:6px 12px;cursor:pointer;z-index:1}.lyx .lyx-x:focus-visible{outline:3px solid #ffd54a;outline-offset:2px}.lyz{cursor:zoom-in}.lyz:focus-visible{outline:3px solid #ffd54a;outline-offset:3px}@media print{.lyx{display:none!important}}";
+var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
+var box=document.createElement("div");box.className="lyx";box.hidden=true;box.setAttribute("role","dialog");box.setAttribute("aria-modal","true");box.setAttribute("aria-label","Full-size view");
+box.innerHTML='<button type="button" class="lyx-x">Close</button><img alt="" hidden><div class="lyx-c" hidden></div><p class="lyx-cap"></p>';
+var big=box.querySelector("img"),cl=box.querySelector(".lyx-c"),cap=box.querySelector(".lyx-cap"),last=null;
+function ready(f){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",f):f()}
+ready(function(){document.body.appendChild(box);mark(document)});
+var IMG=/\.(jpe?g|png|gif|webp|avif|svg)([?#].*)?$/i,SKIP=".lyx,header,[role=banner],nav,.hero,.no-lightbox,.shot-btn,#lightbox,.lightbox,button,label";
+function okImg(im){if(im.closest(SKIP))return false;if(im.getAttribute("alt")===""&&!im.hasAttribute("data-full"))return false;if(im.id==="lightbox-img"||im.id==="img-preview")return false;var a=im.closest("a[href]");if(a&&!IMG.test(a.getAttribute("href")))return false;return true}
+function okDraw(el){if(el.closest(SKIP)||el.closest("a[href]")||el.closest(".lyz")&&el.closest(".lyz")!==el)return false;if(el.hasAttribute("data-lyx"))return true;if(el.matches("figure"))return !el.querySelector("img,input,textarea,select,button");if(el.matches("svg")){if(el.getAttribute("aria-hidden")==="true"||el.closest("figure,[data-lyx],h1,h2,h3,h4,h5,h6,.title"))return false;if(/crest|logo/i.test((el.getAttribute("aria-label")||"")+((el.querySelector("title")||{}).textContent||"")))return false;var v=(el.getAttribute("viewBox")||"").split(/[\s,]+/);return +v[2]>=150}return false}
+function tag(el,label){el.classList.add("lyz");if(!el.closest("a,button")){el.tabIndex=0;el.setAttribute("role","button");el.setAttribute("aria-label",label)}}
+function mark(root){root=root.querySelectorAll?root:document;
+root.querySelectorAll("img").forEach(function(im){if(!im.classList.contains("lyz")&&okImg(im))tag(im,(im.alt?im.alt+". ":"")+"Open full size")});
+root.querySelectorAll("[data-lyx],figure,svg[role=img]").forEach(function(el){if(el.classList.contains("lyz")||!okDraw(el))return;if(el.matches("figure")&&!el.querySelector("svg,[role=img]"))return;var l=el.getAttribute("aria-label")||(el.querySelector("[aria-label]")||{getAttribute:function(){return""}}).getAttribute("aria-label")||(el.querySelector("title")||{}).textContent||"";if(!el.matches("[role=img],svg")||el.hasAttribute("data-lyx"))tag(el,(l?l+". ":"")+"Open full size");else{el.classList.add("lyz");el.tabIndex=0;el.setAttribute("data-lyx-svg","")}})}
+if(window.MutationObserver)new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1&&!box.contains(n))mark(n.tagName==="IMG"?n.parentNode:n)})})}).observe(document.documentElement,{childList:true,subtree:true});
+function show(){box.hidden=false;document.documentElement.style.overflow="hidden";box.querySelector(".lyx-x").focus()}
+function open(el){last=el;cap.textContent="";cl.innerHTML="";cl.hidden=true;big.hidden=true;
+if(el.tagName==="IMG"){var a=el.closest("a[href]");big.src=el.getAttribute("data-full")||(a&&IMG.test(a.getAttribute("href"))?a.href:(el.currentSrc||el.src));big.alt=el.alt||"";big.hidden=false;var f=el.closest("figure"),c=f&&f.querySelector("figcaption");cap.textContent=c?c.textContent.trim():""}
+else{var k=el.cloneNode(true);k.classList.remove("lyz");k.removeAttribute("tabindex");k.removeAttribute("role");k.removeAttribute("aria-label");k.querySelectorAll("[id]").forEach(function(x){x.removeAttribute("id")});k.removeAttribute("id");var bg=getComputedStyle(el).backgroundColor;if(!bg||bg==="rgba(0, 0, 0, 0)"||bg==="transparent"){var w=document.createElement("div");w.className="lyx-pad";w.style.background=getComputedStyle(document.body).backgroundColor||"#fff";w.style.color=getComputedStyle(el).color;w.appendChild(k);k=w}cl.appendChild(k);cl.hidden=false}
+cap.hidden=!cap.textContent;show()}
+function close(){box.hidden=true;big.removeAttribute("src");cl.innerHTML="";document.documentElement.style.overflow="";if(last&&last.focus)last.focus()}
+document.addEventListener("click",function(e){if(!box.hidden){if(box.contains(e.target)&&!(e.target.closest&&e.target.closest("a[href]")))close();return}var el=e.target.closest&&e.target.closest(".lyz");if(!el)return;var ctl=e.target.closest("button,input,textarea,select,summary"),lk=e.target.closest("a[href]");if(ctl&&ctl!==el&&el.contains(ctl))return;if(lk&&!IMG.test(lk.getAttribute("href"))&&lk!==el)return;e.preventDefault();e.stopPropagation();open(el)},true);
+document.addEventListener("keydown",function(e){if(!box.hidden){if(e.key==="Escape"){e.preventDefault();close()}else if(e.key==="Tab"){e.preventDefault();box.querySelector(".lyx-x").focus()}return}var el=e.target.classList&&e.target.classList.contains("lyz")?e.target:null;if(el&&(e.key==="Enter"||e.key===" ")){e.preventDefault();open(el)}});
+})();</script>
 </body>
 </html>
