@@ -130,6 +130,10 @@ main{display:block;max-width:44rem;margin:0 auto;padding:0 1.25rem 4rem}
 .ann-toggle[aria-pressed="true"]{background:var(--t-lilac)}
 [data-theme="contrast"] .ann-toggle[aria-pressed="true"]{background:#ffd54a;color:#000}
 
+.twin{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.3rem;font-family:var(--body);font-size:.98rem;color:var(--ink);background:var(--card);border:2px dashed var(--ink);border-radius:999px;padding:.4rem 1rem;text-decoration:none;line-height:1.3}
+.twin b{font-family:var(--display);font-weight:400;font-size:1.3rem;letter-spacing:.04em}
+.twin:hover{border-style:solid}
+@media print{.twin{display:none}}
 footer{margin-top:2rem;background:#2F1414;color:#f6f1e7;font-family:"Lexend",system-ui,sans-serif;font-size:.8rem;padding:2.5rem 1rem 5.5rem}
 footer a{color:#f6f1e7}
 footer .big{font-family:var(--display);font-size:1.7rem;letter-spacing:.04em;margin:0 0 .5rem}
@@ -186,6 +190,7 @@ body.worksheet-mode footer{display:none}
 <svg class="doodle" style="right:10%;top:14%;width:70px" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><path d="M10 60c10-40 50-50 60-20s-30 30-30 10 30-30 30-40" stroke="#E8BF7A"/></svg>
 <h1><span class="hl">On Annotation</span></h1>
 <p class="sub">A Handbook for Active Readers</p>
+<p style="margin:0"><a class="twin" href="/takenote/">Companion guide: <b>Take Note!</b></a></p>
 <div class="ann-legend" aria-label="Annotation color key" role="note">
       <span class="ann-legend__label">Annotations:</span>
       <span class="ann-legend__item ann-legend__item--note">
